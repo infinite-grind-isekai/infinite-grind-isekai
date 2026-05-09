@@ -2,8 +2,10 @@ package org.rpg.isekai.domain.character;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class Stat {
     private int power;
