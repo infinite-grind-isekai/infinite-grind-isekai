@@ -23,6 +23,7 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable {
 
     public Character(String name) {
         this.name = validateName(name);
+        UsernameValidator.register(name);
         this.level = 1;
         this.stat = new Stat(0, 0, 0, 0);
         this.gold = 0;
@@ -50,11 +51,6 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable {
             return username;
         }
         throw new IllegalArgumentException("적절하지 않은 유저 이름입니다.");
-    }
-
-    @Override
-    public int getLevel() {
-        return level;
     }
 
     @Override

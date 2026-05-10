@@ -1,6 +1,8 @@
 package org.rpg.isekai.domain.job;
 
 import org.rpg.isekai.domain.character.Stat;
+import org.rpg.isekai.domain.skill.IronStrike;
+import org.rpg.isekai.domain.skill.PowerSlash;
 import org.rpg.isekai.domain.skill.Skill;
 
 import java.util.List;
@@ -14,6 +16,9 @@ public class Warrior extends Job {
 
     @Override
     public List<Skill> createSkills() {
-        return List.of();
+        return List.of(
+                new PowerSlash(),
+                new IronStrike()
+        );
     }
 }
