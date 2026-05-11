@@ -1,5 +1,6 @@
 package org.rpg.isekai.domain.monster;
 
+import org.rpg.isekai.domain.character.Stat;
 import org.rpg.isekai.domain.iface.Damageable;
 import org.rpg.isekai.domain.skill.Skill;
 import org.rpg.isekai.domain.skill.monster.SlimeBash;
@@ -11,7 +12,7 @@ import java.util.List;
 public class Slime extends Monster {
 
     public Slime() {
-        super("슬라임", 1, 50, MonsterType.NORMAL, new ArrayList<>(List.of(new SlimeBash(), new SlimeSticky())));
+        super("슬라임", 1, MonsterType.NORMAL, new Stat(5, 2, 50, 10), new ArrayList<>(List.of(new SlimeBash(), new SlimeSticky())));
     }
 
     @Override
