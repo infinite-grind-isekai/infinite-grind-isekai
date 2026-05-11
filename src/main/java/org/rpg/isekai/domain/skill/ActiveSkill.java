@@ -16,3 +16,4 @@ public abstract class ActiveSkill extends Skill {
         return true;
     }
 }
+
