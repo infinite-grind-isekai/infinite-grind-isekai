@@ -1,8 +1,8 @@
 package org.rpg.isekai.domain.job;
 
 import org.rpg.isekai.domain.character.Stat;
-import org.rpg.isekai.domain.skill.IronStrike;
-import org.rpg.isekai.domain.skill.PowerSlash;
+import org.rpg.isekai.domain.skill.character.IronStrike;
+import org.rpg.isekai.domain.skill.character.PowerSlash;
 import org.rpg.isekai.domain.skill.Skill;
 
 import java.util.List;

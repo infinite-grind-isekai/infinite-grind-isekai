@@ -1,8 +1,8 @@
 package org.rpg.isekai.domain.job;
 
 import org.rpg.isekai.domain.character.Stat;
-import org.rpg.isekai.domain.skill.HeadShot;
-import org.rpg.isekai.domain.skill.RapidFire;
+import org.rpg.isekai.domain.skill.character.HeadShot;
+import org.rpg.isekai.domain.skill.character.RapidFire;
 import org.rpg.isekai.domain.skill.Skill;
 
 import java.util.List;

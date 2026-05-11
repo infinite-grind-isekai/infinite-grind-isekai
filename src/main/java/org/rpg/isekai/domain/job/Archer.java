@@ -1,8 +1,8 @@
 package org.rpg.isekai.domain.job;
 
 import org.rpg.isekai.domain.character.Stat;
-import org.rpg.isekai.domain.skill.DoubleShot;
-import org.rpg.isekai.domain.skill.PiercingArrow;
+import org.rpg.isekai.domain.skill.character.DoubleShot;
+import org.rpg.isekai.domain.skill.character.PiercingArrow;
 import org.rpg.isekai.domain.skill.Skill;
 
 import java.util.List;
