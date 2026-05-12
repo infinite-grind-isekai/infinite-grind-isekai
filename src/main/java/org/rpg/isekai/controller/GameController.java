@@ -71,6 +71,17 @@ public class GameController implements Starter {
 
     private void enterStore(Character character) {
         while (true) {
+            int choice = GameMenuView.showStoreMenu(character);
+            switch (choice) {
+                case 1 -> buyItem(character);
+                case 2 -> sellItem(character);
+                case 0 -> { return; }
+            }
+        }
+    }
+
+    private void buyItem(Character character) {
+        while (true) {
             Item selected = GameMenuView.showItemStore(character, itemManager.getStoreItems());
             if (selected == null) break;
 
@@ -81,6 +92,19 @@ public class GameController implements Starter {
             } else {
                 System.out.println("     [ ! ] 골드가 부족합니다.");
             }
+            ConsoleUtils.sleep(1000);
+        }
+    }
+
+    private void sellItem(Character character) {
+        while (true) {
+            Item selected = GameMenuView.showSellMenu(character);
+            if (selected == null) break;
+
+            int sellPrice = selected.getPrice() / 2;
+            character.setGold(character.getGold() + sellPrice);
+            character.getInventory().remove(selected);
+            System.out.println("     [ + ] " + selected.getName() + "을(를) " + sellPrice + " G에 판매했습니다.");
             ConsoleUtils.sleep(1000);
         }
     }
@@ -156,5 +180,4 @@ public class GameController implements Starter {
             }
         }
     }
-
 }

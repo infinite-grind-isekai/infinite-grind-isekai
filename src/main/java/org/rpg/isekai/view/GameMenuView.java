@@ -166,12 +166,40 @@ public class GameMenuView {
 
     // ── 상점 목록 ───────────────────────────────────────────────────────────────
 
-    public static Item showItemStore(Character ch, List<Item> storeItems) {
+    public static int showStoreMenu(Character ch) {
         while (true) {
             ConsoleUtils.clear();
             printStatusHeader(ch);
             System.out.println("     ┌───────────────────────────────────────────────────────┐");
             System.out.println("     │                    [ 마 을 상 점 ]                    │");
+            System.out.println("     ├───────────────────────────────────────────────────────┤");
+            System.out.println("     │                                                       │");
+            System.out.println("     │    1.  아이템 구매                                    │");
+            System.out.println("     │    2.  아이템 판매                                    │");
+            System.out.println("     │                                                       │");
+            System.out.println("     │    0.  돌아가기                                       │");
+            System.out.println("     │                                                       │");
+            System.out.println("     └───────────────────────────────────────────────────────┘");
+            System.out.println();
+            System.out.print("     선택 > ");
+
+            String input = ConsoleUtils.SCANNER.nextLine().trim();
+            switch (input) {
+                case "1", "2", "0" -> { return Integer.parseInt(input); }
+                default -> {
+                    System.out.println("     [ ! ] 올바른 번호를 입력하세요.");
+                    ConsoleUtils.sleep(700);
+                }
+            }
+        }
+    }
+
+    public static Item showItemStore(Character ch, List<Item> storeItems) {
+        while (true) {
+            ConsoleUtils.clear();
+            printStatusHeader(ch);
+            System.out.println("     ┌───────────────────────────────────────────────────────┐");
+            System.out.println("     │               [ 마 을 상 점 - 구 매 ]                 │");
             System.out.println("     ├──────┬────────────────────────┬────────────┬──────────┤");
             System.out.println("     │  No  │  아이템 이름           │  종류      │  가격    │");
             System.out.println("     ├──────┼────────────────────────┼────────────┼──────────┤");
@@ -196,6 +224,52 @@ public class GameMenuView {
                 int idx = Integer.parseInt(input) - 1;
                 if (idx >= 0 && idx < storeItems.size()) {
                     return storeItems.get(idx);
+                }
+            } catch (NumberFormatException ignored) {}
+
+            System.out.println("     [ ! ] 올바른 번호를 입력하세요.");
+            ConsoleUtils.sleep(700);
+        }
+    }
+
+    public static Item showSellMenu(Character ch) {
+        while (true) {
+            ConsoleUtils.clear();
+            printStatusHeader(ch);
+            List<Item> items = ch.getInventory().getItems();
+
+            System.out.println("     ┌───────────────────────────────────────────────────────┐");
+            System.out.println("     │               [ 마 을 상 점 - 판 매 ]                 │");
+            System.out.println("     ├──────┬────────────────────────┬────────────┬──────────┤");
+            System.out.println("     │  No  │  아이템 이름           │  종류      │  판매가  │");
+            System.out.println("     ├──────┼────────────────────────┼────────────┼──────────┤");
+
+            if (items.isEmpty()) {
+                System.out.println("     │               보유한 아이템이 없습니다.               │");
+            } else {
+                for (int i = 0; i < items.size(); i++) {
+                    Item item = items.get(i);
+                    // 판매가는 원가의 50%로 설정 (또는 정책에 따라 변경 가능)
+                    int sellPrice = item.getPrice() / 2;
+                    System.out.printf("     │  %-4d│  %-22s  │  %-8s  │  %4d G  │%n",
+                            i + 1, item.getName(), item.getType().name(), sellPrice);
+                }
+            }
+
+            System.out.println("     ├──────┴────────────────────────┴────────────┴──────────┤");
+            System.out.println("     │    0.  돌아가기                                        │");
+            System.out.println("     └───────────────────────────────────────────────────────┘");
+            System.out.println();
+            System.out.print("     판매할 아이템 번호 > ");
+
+            String input = ConsoleUtils.SCANNER.nextLine().trim();
+
+            if (input.equals("0")) return null;
+
+            try {
+                int idx = Integer.parseInt(input) - 1;
+                if (idx >= 0 && idx < items.size()) {
+                    return items.get(idx);
                 }
             } catch (NumberFormatException ignored) {}
 
