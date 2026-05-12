@@ -14,7 +14,7 @@ public class ArmorItem extends Item {
 
     @Override
     public void use(Character character) {
-        character.getStat().setDefense(character.getStat().getDefense() + defensePower);
+        character.getTotalStat().setDefense(character.getTotalStat().getDefense() + defensePower);
         System.out.println(name + " 장착! 방어력 +" + defensePower);
     }
 }

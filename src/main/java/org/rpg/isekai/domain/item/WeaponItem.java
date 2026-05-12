@@ -14,7 +14,7 @@ public class WeaponItem extends Item {
 
     @Override
     public void use(Character character) {
-        character.getStat().setPower(character.getStat().getPower() + attackPower);
+        character.getTotalStat().setPower(character.getTotalStat().getPower() + attackPower);
         System.out.println(name + " 장착! 공격력 +" + attackPower);
     }
 }

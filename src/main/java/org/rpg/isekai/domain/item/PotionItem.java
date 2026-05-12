@@ -14,7 +14,7 @@ public class PotionItem extends Item {
 
     @Override
     public void use(Character character) {
-        character.getStat().setHp(character.getStat().getHp() + healAmount);
+        character.getTotalStat().setHp(character.getTotalStat().getHp() + healAmount);
         System.out.println(name + " 사용! HP +" + healAmount);
     }
 }

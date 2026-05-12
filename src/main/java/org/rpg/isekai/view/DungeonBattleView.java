@@ -322,6 +322,7 @@ public class DungeonBattleView {
     private static String miniIcon(Monster m) {
         return switch (m.getClass().getSimpleName()) {
             case "Slime"         -> "(.~.)";
+            case "GiantSlime"    -> "(o~o)";
             case "Skeleton"      -> "(x_x)";
             case "Goblin"        -> "(>.>)";
             case "Orc"           -> "(O_O)";
@@ -335,6 +336,12 @@ public class DungeonBattleView {
             case "Slime" -> new String[]{
                 "   .~~~~~.",
                 "  ( ^   ^ )",
+                "  (  ---  )",
+                "   '~~~~~'"
+            };
+            case "GiantSlime" -> new String[]{
+                "   .~xxx~.",
+                "  ( x   x )",
                 "  (  ---  )",
                 "   '~~~~~'"
             };

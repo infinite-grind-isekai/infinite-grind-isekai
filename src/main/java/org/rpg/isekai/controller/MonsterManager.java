@@ -28,6 +28,7 @@ public class MonsterManager implements Manager {
         factories.put(Goblin.class, Goblin::new);
         factories.put(Orc.class, Orc::new);
         factories.put(AncientDragon.class, AncientDragon::new);
+        factories.put(GiantSlime.class, GiantSlime::new);
     }
 
     public Supplier<Monster> getFactory(Class<? extends Monster> type) {
