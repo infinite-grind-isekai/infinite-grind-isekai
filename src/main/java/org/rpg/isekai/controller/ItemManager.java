@@ -50,7 +50,7 @@ public class ItemManager implements Manager{
 
     @Override
     public boolean needPrepare() {
-        return true;
+        return false;
     }
 
     @Override
