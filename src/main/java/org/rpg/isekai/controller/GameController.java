@@ -2,11 +2,12 @@ package org.rpg.isekai.controller;
 
 import org.rpg.isekai.domain.battle.*;
 import org.rpg.isekai.domain.character.Character;
-import org.rpg.isekai.domain.item.AmorItem.*;
 import org.rpg.isekai.domain.item.Item;
-import org.rpg.isekai.domain.item.MaterialItem.*;
-import org.rpg.isekai.domain.item.PotionItem.*;
-import org.rpg.isekai.domain.item.WeaponItem.*;
+import org.rpg.isekai.domain.item.amorItem.*;
+import org.rpg.isekai.domain.item.materialItem.*;
+import org.rpg.isekai.domain.item.potionItem.*;
+import org.rpg.isekai.domain.item.potionItem.HeartOfDragon;
+import org.rpg.isekai.domain.item.potionItem.PhoenixFeather;
 import org.rpg.isekai.domain.job.Job;
 import org.rpg.isekai.domain.monster.Monster;
 import org.rpg.isekai.domain.skill.ActiveSkill;
@@ -19,9 +20,11 @@ import java.util.Map;
 public class GameController implements Starter {
 
     private final DungeonManager dungeonManager;
+    private final ItemManager itemManager;
 
-    public GameController(DungeonManager dungeonManager) {
+    public GameController(DungeonManager dungeonManager, ItemManager itemManager) {
         this.dungeonManager = dungeonManager;
+        this.itemManager = itemManager;
     }
 
     @Override
@@ -67,36 +70,8 @@ public class GameController implements Starter {
     }
 
     private void enterStore(Character character) {
-        // 상점에서 판매할 아이템 목록 생성 (모든 아이템 추가)
-        List<Item> storeItems = List.of(
-                // 포션류
-                new HealthPotion(),
-                new ManaPotion(),
-                new EnergyDrink(),
-                new HeartOfDragon(),
-                new PhoenixFeather(),
-                // 무기류
-                new IronSword(),
-                new MagicStaff(),
-                new DoomBringer(),
-                new ShadowReaper(),
-                new ThunderstrikeDagger(),
-                // 방어구류
-                new LeatherArmor(),
-                new IronPlate(),
-                new TitanArmor(),
-                new FrostguardShield(),
-                new DragonScaleMail(),
-                // 재료류
-                new SlimeJelly(),
-                new SkeletonBone(),
-                new GoblinEar(),
-                new OrcTooth(),
-                new DragonScale()
-        );
-
         while (true) {
-            Item selected = GameMenuView.showItemStore(character, storeItems);
+            Item selected = GameMenuView.showItemStore(character, itemManager.getStoreItems());
             if (selected == null) break;
 
             if (character.getGold() >= selected.getPrice()) {

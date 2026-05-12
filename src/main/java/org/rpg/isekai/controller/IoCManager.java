@@ -14,6 +14,7 @@ public class IoCManager {
 
     public IoCManager() {
         MonsterManager monsterManager = new MonsterManager();
+        ItemManager itemManager = new ItemManager();
         DungeonManager dungeonManager = new DungeonManager(monsterManager);
 
         List<Manager> tmpList = List.of(monsterManager, dungeonManager);
@@ -23,7 +24,7 @@ public class IoCManager {
                 .map(c -> (Registerar) c)
                 .toList();
 
-        starter = new GameController(dungeonManager);
+        starter = new GameController(dungeonManager, itemManager);
     }
 
     public void run() {
