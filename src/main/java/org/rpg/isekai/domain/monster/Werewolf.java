@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Werewolf extends Monster {
     public Werewolf() {
-        super("워우울프", 50, MonsterType.NORMAL, new Stat(100, 40, 2500, 200),
+        super("워우울프", 50, MonsterType.NORMAL, new Stat(100, 0.0, 40, 2500, 200),
                 new ArrayList<>(List.of(new HeavyBash())),
                 new Reward(300, List.of(new IronSword(), new OrcTooth())), 800);
     }

@@ -5,6 +5,6 @@ import org.rpg.isekai.domain.skill.PassiveSkill;
 
 public class HeadShot extends ActiveSkill {
     public HeadShot() {
-        super("헤드샷", 40, 5, 120);
+        super("헤드샷", 40, 0, 120);
     }
 }

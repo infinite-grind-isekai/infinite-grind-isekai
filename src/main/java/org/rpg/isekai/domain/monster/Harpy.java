@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Harpy extends Monster {
     public Harpy() {
-        super("하피", 15, MonsterType.NORMAL, new Stat(35, 15, 300, 100),
+        super("하피", 15, MonsterType.NORMAL, new Stat(35, 0.0, 15, 300, 100),
                 new ArrayList<>(List.of(new PoisonSpit())),
                 new Reward(100, List.of(new HealthPotion(), new GoblinEar())), 150);
     }

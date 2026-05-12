@@ -30,6 +30,7 @@ public class BattleStage implements Stage {
 
     @Override
     public void start(Character player, RewardContext rewardContext) {
+        player.getCoolDownContext().clear();
         this.context = new StageContext(number, player, monsters, new Battle(player, monsters), rewardContext);
     }
 

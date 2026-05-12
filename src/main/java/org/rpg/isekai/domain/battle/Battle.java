@@ -26,13 +26,13 @@ public class Battle {
         if (monsters == null || monsters.isEmpty()) {
             throw new IllegalArgumentException("전투에는 최소 한 마리 이상의 몬스터가 필요합니다.");
         }
-        this.player = player;
-        this.monsters = List.copyOf(monsters);
+        this.player    = player;
+        this.monsters  = List.copyOf(monsters);
         this.turnOrder = new ArrayList<>();
         this.turnOrder.add(player);
         this.turnOrder.addAll(monsters);
-        this.status = BattleStatus.READY;
-        this.round = 1;
+        this.status    = BattleStatus.READY;
+        this.round     = 1;
         this.turnCursor = 0;
     }
 
@@ -40,12 +40,11 @@ public class Battle {
         if (isFinished()) {
             throw new IllegalStateException("이미 종료된 전투입니다.");
         }
-
         if (status == BattleStatus.READY) {
             status = BattleStatus.IN_PROGRESS;
         }
 
-        BattleParticipant actor = getCurrentActor();
+        BattleParticipant actor  = getCurrentActor();
         BattleParticipant target = resolveTarget(actor);
         ActiveSkill skill = resolveSkill(actor, selectedSkill);
 
@@ -66,43 +65,33 @@ public class Battle {
         return status == BattleStatus.PLAYER_VICTORY || status == BattleStatus.MONSTER_VICTORY;
     }
 
-    public boolean isPlayerVictory() {
-        return status == BattleStatus.PLAYER_VICTORY;
-    }
+    public boolean isPlayerVictory() { return status == BattleStatus.PLAYER_VICTORY; }
 
-    public boolean isMonsterVictory() {
-        return status == BattleStatus.MONSTER_VICTORY;
-    }
+    public boolean isMonsterVictory() { return status == BattleStatus.MONSTER_VICTORY; }
 
-    public void skipPlayerTurn() {
-        advanceCursor();
-    }
+    public void skipPlayerTurn() { advanceCursor(); }
 
     public boolean isPlayerTurn() {
         int cursor = turnCursor;
         for (int i = 0; i < turnOrder.size(); i++) {
             BattleParticipant p = turnOrder.get(cursor);
-            if (!p.isDead()) {
-                return p == player;
-            }
+            if (!p.isDead()) return p == player;
             cursor = (cursor + 1) % turnOrder.size();
         }
         return false;
     }
 
     public List<Monster> getAliveMonsters() {
-        return monsters.stream()
-                .filter(monster -> !monster.isDead())
-                .toList();
+        return monsters.stream().filter(m -> !m.isDead()).toList();
     }
+
+    // ── private ───────────────────────────────────────────────────────────────
 
     private BattleParticipant getCurrentActor() {
         int checked = 0;
         while (checked < turnOrder.size()) {
-            BattleParticipant participant = turnOrder.get(turnCursor);
-            if (!participant.isDead()) {
-                return participant;
-            }
+            BattleParticipant p = turnOrder.get(turnCursor);
+            if (!p.isDead()) return p;
             advanceCursor();
             checked++;
         }
@@ -115,20 +104,8 @@ public class Battle {
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException("살아있는 몬스터가 없습니다."));
         }
-        if (player.isDead()) {
-            throw new IllegalStateException("플레이어가 이미 사망했습니다.");
-        }
+        if (player.isDead()) throw new IllegalStateException("플레이어가 이미 사망했습니다.");
         return player;
-    }
-
-    private static int calculateFinalDamage(BattleParticipant actor, BattleParticipant target, ActiveSkill skill, boolean critical) {
-        int base = Math.max(1, actor.getAttackPower() + skill.getDamage() - target.getDefensePower());
-        return critical ? base * 2 : base;
-    }
-
-    private void applyAttack(BattleParticipant actor, ActiveSkill skill, BattleParticipant target, int damage) {
-        actor.consumeMp(skill.getMpCost());
-        target.damage(skill, damage);
     }
 
     private ActiveSkill resolveSkill(BattleParticipant actor, Skill selectedSkill) {
@@ -141,12 +118,23 @@ public class Battle {
             }
             return activeSkill;
         }
-
         List<ActiveSkill> usable = actor.getUsableSkills();
         if (usable.isEmpty()) {
             throw new IllegalStateException("몬스터가 사용할 수 있는 액티브 스킬이 없습니다.");
         }
         return usable.get(new Random().nextInt(usable.size()));
+    }
+
+    private static int calculateFinalDamage(BattleParticipant actor, BattleParticipant target,
+                                            ActiveSkill skill, boolean critical) {
+        int base = Math.max(1, actor.getAttackPower() + skill.getDamage() - target.getDefensePower());
+        return critical ? base * 2 : base;
+    }
+
+    private void applyAttack(BattleParticipant actor, ActiveSkill skill, BattleParticipant target, int damage) {
+        actor.consumeMp(skill.getMpCost());
+        actor.getCoolDownContext().register(skill);
+        target.damage(skill, damage);
     }
 
     private void updateStatus() {

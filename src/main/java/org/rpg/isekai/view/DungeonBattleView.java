@@ -66,22 +66,35 @@ public class DungeonBattleView {
     // ── 플레이어 스킬 선택 ─────────────────────────────────────────────────────
 
     public static ActiveSkill showSkillMenu(Character ch) {
-        List<ActiveSkill> usable = ch.getUsableSkills();
-
         System.out.println();
         System.out.println("     ══════════════════  ★  당 신 의 턴  ★  ══════════════════");
         System.out.println();
 
-        if (usable.isEmpty()) {
-            System.out.println("     [ ! ] 사용 가능한 스킬이 없습니다. (MP 부족)");
-            ConsoleUtils.sleep(1200);
-            return null;
+        List<ActiveSkill> usable   = ch.getUsableSkills();
+        List<ActiveSkill> allActive = ch.getSkills().stream()
+                .filter(ActiveSkill.class::isInstance)
+                .map(ActiveSkill.class::cast)
+                .toList();
+
+        java.util.Map<Integer, ActiveSkill> selectable = new java.util.LinkedHashMap<>();
+        int selectIdx = 1;
+
+        for (ActiveSkill skill : allActive) {
+            if (usable.contains(skill)) {
+                System.out.printf("       %d.  %-16s  MP %3d   DMG %3d%n",
+                        selectIdx, skill.getName(), skill.getMpCost(), skill.getDamage());
+                selectable.put(selectIdx++, skill);
+            } else {
+                int cd = ch.getCoolDownContext().getRemainingCooldown(skill);
+                String reason = cd > 0 ? "쿨다운 " + cd + "턴" : "MP 부족";
+                System.out.printf("       -   %-16s  [%s]%n", skill.getName(), reason);
+            }
         }
 
-        for (int i = 0; i < usable.size(); i++) {
-            ActiveSkill s = usable.get(i);
-            System.out.printf("       %d.  %-16s  MP %3d   DMG %3d%n",
-                    i + 1, s.getName(), s.getMpCost(), s.getDamage());
+        if (selectable.isEmpty()) {
+            System.out.println("     [ ! ] 사용 가능한 스킬이 없습니다.");
+            ConsoleUtils.sleep(1200);
+            return null;
         }
 
         while (true) {
@@ -89,8 +102,8 @@ public class DungeonBattleView {
             System.out.print("     스킬 선택 > ");
             String input = ConsoleUtils.SCANNER.nextLine().trim();
             try {
-                int idx = Integer.parseInt(input) - 1;
-                if (idx >= 0 && idx < usable.size()) return usable.get(idx);
+                int idx = Integer.parseInt(input);
+                if (selectable.containsKey(idx)) return selectable.get(idx);
             } catch (NumberFormatException ignored) {}
             System.out.println("     [ ! ] 올바른 번호를 입력하세요.");
         }
