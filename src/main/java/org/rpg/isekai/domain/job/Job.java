@@ -8,6 +8,7 @@ import java.util.List;
 
 @Getter
 public abstract class Job {
+    protected JobKind jobKind;
     protected String name;
     protected Stat stat;
 

@@ -11,7 +11,7 @@ import java.util.List;
 public class Skeleton extends Monster {
 
     public Skeleton() {
-        super("스켈레톤", 1, MonsterType.NORMAL, new Stat(8, 3, 30, 0),
+        super("스켈레톤", 1, MonsterType.NORMAL, new Stat(8, 0, 3, 30, 0),
                 new ArrayList<>(List.of(new HeavyBash(), new BoneFragments())),
                 new Reward(20, List.of()), 20);
     }

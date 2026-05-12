@@ -11,7 +11,7 @@ import java.util.List;
 public class Goblin extends Monster {
 
     public Goblin() {
-        super("고블린", 5, MonsterType.NORMAL, new Stat(12, 5, 80, 20),
+        super("고블린", 5, MonsterType.NORMAL, new Stat(12, 0, 5, 80, 20),
                 new ArrayList<>(List.of(new GoblinPunch(), new PoisonSpit())),
                 new Reward(30, List.of()), 50);
     }
