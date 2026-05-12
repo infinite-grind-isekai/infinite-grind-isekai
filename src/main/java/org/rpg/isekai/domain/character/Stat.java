@@ -19,6 +19,13 @@ public class Stat {
         this(0, 0, 0, 0, 0);
     }
 
+    public Stat(int power, int defense, int hp, int mp) {
+        this.power = power;
+        this.defense = defense;
+        this.hp = hp;
+        this.mp = mp;
+    }
+
     public Stat plus(Stat other) {
         if (other == null) return this;
         return new Stat(

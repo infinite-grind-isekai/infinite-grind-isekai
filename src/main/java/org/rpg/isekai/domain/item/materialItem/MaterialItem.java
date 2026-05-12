@@ -1,4 +1,4 @@
-package org.rpg.isekai.domain.item.MaterialItem;
+package org.rpg.isekai.domain.item.materialItem;
 
 import org.rpg.isekai.domain.character.Character;
 import org.rpg.isekai.domain.item.Item;

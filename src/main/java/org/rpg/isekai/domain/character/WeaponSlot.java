@@ -1,10 +1,9 @@
 package org.rpg.isekai.domain.character;
 
 import lombok.NoArgsConstructor;
-import org.rpg.isekai.domain.item.ArmorItem;
 import org.rpg.isekai.domain.item.Item;
 import org.rpg.isekai.domain.item.ItemType;
-import org.rpg.isekai.domain.item.WeaponItem;
+import org.rpg.isekai.domain.item.weaponItem.WeaponItem;
 
 @NoArgsConstructor
 public class WeaponSlot implements Slot{

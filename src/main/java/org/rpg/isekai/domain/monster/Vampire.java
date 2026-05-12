@@ -2,8 +2,8 @@ package org.rpg.isekai.domain.monster;
 
 import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.character.Stat;
-import org.rpg.isekai.domain.item.WeaponItem.MagicStaff;
-import org.rpg.isekai.domain.item.PotionItem.ManaPotion;
+import org.rpg.isekai.domain.item.weaponItem.MagicStaff;
+import org.rpg.isekai.domain.item.potionItem.ManaPotion;
 import org.rpg.isekai.domain.skill.monster.SoulDrain;
 
 import java.util.ArrayList;

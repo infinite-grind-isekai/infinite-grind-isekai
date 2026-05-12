@@ -2,9 +2,9 @@ package org.rpg.isekai.domain.monster;
 
 import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.character.Stat;
-import org.rpg.isekai.domain.item.AmorItem.TitanArmor;
-import org.rpg.isekai.domain.item.MaterialItem.SkeletonBone;
-import org.rpg.isekai.domain.item.PotionItem.HealthPotion;
+import org.rpg.isekai.domain.item.amorItem.TitanArmor;
+import org.rpg.isekai.domain.item.materialItem.SkeletonBone;
+import org.rpg.isekai.domain.item.potionItem.HealthPotion;
 import org.rpg.isekai.domain.skill.monster.BoneFragments;
 import org.rpg.isekai.domain.skill.monster.HeavyBash;
 

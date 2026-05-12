@@ -1,6 +1,4 @@
-package org.rpg.isekai.domain.item.PotionItem;
-
-import org.rpg.isekai.domain.item.MaterialItem.MaterialItem;
+package org.rpg.isekai.domain.item.potionItem;
 
 public class HeartOfDragon extends PotionItem {
     public HeartOfDragon() {

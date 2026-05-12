@@ -2,7 +2,7 @@ package org.rpg.isekai.domain.job;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.rpg.isekai.domain.item.WeaponType;
+import org.rpg.isekai.domain.item.weaponItem.WeaponType;
 
 @Getter
 @AllArgsConstructor

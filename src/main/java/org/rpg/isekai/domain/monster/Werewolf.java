@@ -2,8 +2,8 @@ package org.rpg.isekai.domain.monster;
 
 import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.character.Stat;
-import org.rpg.isekai.domain.item.WeaponItem.IronSword;
-import org.rpg.isekai.domain.item.MaterialItem.OrcTooth;
+import org.rpg.isekai.domain.item.weaponItem.IronSword;
+import org.rpg.isekai.domain.item.materialItem.OrcTooth;
 import org.rpg.isekai.domain.skill.monster.HeavyBash;
 
 import java.util.ArrayList;

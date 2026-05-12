@@ -1,12 +1,10 @@
 package org.rpg.isekai.domain.character;
 
 import lombok.Getter;
-import org.rpg.isekai.domain.item.ArmorItem;
-import org.rpg.isekai.domain.item.Item;
-import org.rpg.isekai.domain.item.WeaponItem;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.rpg.isekai.domain.item.amorItem.ArmorItem;
+import org.rpg.isekai.domain.item.Item;
+import org.rpg.isekai.domain.item.weaponItem.WeaponItem;
 
 @Getter
 public class Loadout {

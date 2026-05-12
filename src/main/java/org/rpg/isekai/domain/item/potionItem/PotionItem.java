@@ -1,4 +1,4 @@
-package org.rpg.isekai.domain.item.PotionItem;
+package org.rpg.isekai.domain.item.potionItem;
 
 import lombok.Getter;
 import org.rpg.isekai.domain.character.Character;

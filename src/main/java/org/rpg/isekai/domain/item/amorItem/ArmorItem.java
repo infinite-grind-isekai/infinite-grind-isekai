@@ -1,7 +1,6 @@
-package org.rpg.isekai.domain.item.AmorItem;
+package org.rpg.isekai.domain.item.amorItem;
 
 import lombok.Getter;
-import org.rpg.isekai.domain.character.ArmorType;
 import org.rpg.isekai.domain.character.Character;
 import org.rpg.isekai.domain.item.Item;
 import org.rpg.isekai.domain.item.ItemType;

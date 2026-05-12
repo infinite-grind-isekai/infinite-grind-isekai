@@ -2,8 +2,8 @@ package org.rpg.isekai.domain.monster;
 
 import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.character.Stat;
-import org.rpg.isekai.domain.item.PotionItem.HealthPotion;
-import org.rpg.isekai.domain.item.MaterialItem.GoblinEar;
+import org.rpg.isekai.domain.item.potionItem.HealthPotion;
+import org.rpg.isekai.domain.item.materialItem.GoblinEar;
 import org.rpg.isekai.domain.skill.monster.PoisonSpit;
 
 import java.util.ArrayList;

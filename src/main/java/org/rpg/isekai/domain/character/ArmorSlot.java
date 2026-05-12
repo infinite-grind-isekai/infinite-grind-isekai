@@ -1,10 +1,10 @@
 package org.rpg.isekai.domain.character;
 
 import lombok.NoArgsConstructor;
-import org.rpg.isekai.domain.item.ArmorItem;
+import org.rpg.isekai.domain.item.amorItem.ArmorItem;
 import org.rpg.isekai.domain.item.Item;
+import org.rpg.isekai.domain.item.amorItem.ArmorType;
 
-import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor

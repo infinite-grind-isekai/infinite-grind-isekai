@@ -1,4 +1,4 @@
-package org.rpg.isekai.domain.item.PotionItem;
+package org.rpg.isekai.domain.item.potionItem;
 
 public class PhoenixFeather extends PotionItem{
     public PhoenixFeather() {

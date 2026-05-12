@@ -1,4 +1,4 @@
-package org.rpg.isekai.domain.item.MaterialItem;
+package org.rpg.isekai.domain.item.materialItem;
 
 public class GoblinEar extends MaterialItem {
     public GoblinEar() {
