@@ -10,8 +10,9 @@ import java.util.List;
 public class Archer extends Job {
 
     public Archer() {
-        this.name = "궁수";
-        this.stat = new Stat(35, 0, 90, 60);
+        this.name = JobKind.ARCHER.getName();
+        this.stat = new Stat(35, 20.0, 0, 90, 60);
+        this.jobKind = JobKind.ARCHER;
     }
 
     @Override

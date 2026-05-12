@@ -1,6 +1,8 @@
 package org.rpg.isekai.domain.character;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.rpg.isekai.domain.battle.BattleParticipant;
 import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.iface.Attackable;
@@ -30,18 +32,25 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
     private int currentExp;
     private final Stat baseStat;
     private final Inventory inventory;
+    private final Loadout loadout;
     private Job job;
     private int gold;
     private List<Skill> skills;
     private int currentHp;
     private int currentMp;
 
+    @Setter(AccessLevel.PRIVATE)
+    private Stat cachedTotalStat;
+    @Setter(AccessLevel.PRIVATE)
+    private boolean isDirty = true;
+
     public Character(String name) {
         this.name = validateName(name);
         UsernameValidator.register(name);
         this.level      = 1;
         this.currentExp = 0;
-        this.baseStat   = new Stat(0, 0, 0, 0);
+        this.baseStat   = new Stat(0, 0.0, 0, 0, 0);
+        this.loadout    = new Loadout();
         this.inventory  = new Inventory();
         this.gold       = 0;
         this.skills     = new ArrayList<>();
@@ -58,26 +67,19 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
 
     public Stat getTotalStat() {
         int lv = level - 1;
-        int atkBonus = lv * LV_ATK;
-        int defBonus = lv * LV_DEF;
-        int hpBonus  = lv * LV_HP;
-        int mpBonus  = lv * LV_MP;
+        Stat levelBonus = new Stat(lv * LV_ATK, 0, lv * LV_DEF, lv * LV_HP, lv * LV_MP);
 
-        if (job == null) {
-            return new Stat(
-                baseStat.getPower()   + atkBonus,
-                baseStat.getDefense() + defBonus,
-                baseStat.getHp()      + hpBonus,
-                baseStat.getMp()      + mpBonus
-            );
+        Stat total = baseStat.plus(levelBonus);
+
+        if (job != null) {
+            total = total.plus(job.getStat());
         }
-        Stat jobStat = job.getStat();
-        return new Stat(
-            baseStat.getPower()   + jobStat.getPower()   + atkBonus,
-            baseStat.getDefense() + jobStat.getDefense() + defBonus,
-            baseStat.getHp()      + jobStat.getHp()      + hpBonus,
-            baseStat.getMp()      + jobStat.getMp()      + mpBonus
-        );
+
+        if (loadout != null) {
+            total = total.plus(loadout.getItemsStat());
+        }
+
+        return total;
     }
 
     public int gainExp(int amount) {
@@ -109,7 +111,16 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
 
     @Override
     public int getAttackPower() {
-        return getTotalStat().getPower();
+        int power = getTotalStat().getPower();
+        if (isCriticalHit()) {
+            return power * 2;
+        }
+        return power;
+    }
+
+    private boolean isCriticalHit() {
+        double chance = getTotalStat().getCritical();
+        return Math.random() < chance;
     }
 
     @Override

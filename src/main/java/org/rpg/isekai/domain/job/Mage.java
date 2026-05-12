@@ -10,8 +10,9 @@ import java.util.List;
 public class Mage extends Job {
 
     public Mage() {
-        this.name = "마법사";
-        this.stat = new Stat(20, 0, 70, 120);
+        this.name = JobKind.MAGE.getName();
+        this.stat = new Stat(20, 5.0, 0, 70, 120);
+        this.jobKind = JobKind.MAGE;
     }
 
     @Override
