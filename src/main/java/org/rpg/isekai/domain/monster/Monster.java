@@ -22,22 +22,25 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
     private final MonsterType type;
     private final Stat stat;
     private final List<Skill> skills;
-
     private Reward reward;
-
+    private final int exp;
     private int currentHp;
     private int currentMp;
 
     public Monster(String name, int level, MonsterType type, Stat stat) {
-        this(name, level, type, stat, List.of(), Reward.empty());
+        this(name, level, type, stat, List.of(), Reward.empty(), 0);
     }
 
     public Monster(String name, int level, MonsterType type, Stat stat, List<Skill> skills) {
-        this(name, level, type, stat, skills, Reward.empty());
+        this(name, level, type, stat, skills, Reward.empty(), 0);
     }
 
     public Monster(String name, int level, MonsterType type, Stat stat, List<Skill> skills, Reward reward) {
-        this(name, level, type, stat, skills, reward, stat.getHp(), stat.getMp());
+        this(name, level, type, stat, skills, reward, 0);
+    }
+
+    public Monster(String name, int level, MonsterType type, Stat stat, List<Skill> skills, Reward reward, int exp) {
+        this(name, level, type, stat, skills, reward, exp, stat.getHp(), stat.getMp());
     }
 
     @Override
@@ -68,11 +71,9 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
         if (!canUse(activeSkill)) {
             throw new IllegalStateException("사용할 수 없는 스킬입니다.");
         }
-
         if (MonsterType.BOSS.equals(type)) {
             return (int) ((getAttackPower() + activeSkill.getDamage()) * 0.8);
         }
-
         return getAttackPower() + activeSkill.getDamage();
     }
 
@@ -87,7 +88,6 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
         if (!(target instanceof BattleParticipant participant)) {
             throw new IllegalArgumentException("전투 대상이 아닙니다.");
         }
-
         consumeMp(activeSkill.getMpCost());
         int damage = BattleParticipant.calculateDamage(this, participant, activeSkill);
         target.damage(activeSkill, damage);
@@ -106,5 +106,10 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
     @Override
     public void consumeMp(int amount) {
         currentMp = Math.max(0, currentMp - amount);
+    }
+
+    @Override
+    public void recoverMp(int amount) {
+        currentMp = Math.min(currentMp + amount, stat.getMp());
     }
 }

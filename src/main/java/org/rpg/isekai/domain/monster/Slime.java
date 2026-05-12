@@ -13,6 +13,6 @@ public class Slime extends Monster {
     public Slime() {
         super("슬라임", 1, MonsterType.NORMAL, new Stat(5, 2, 50, 10),
                 new ArrayList<>(List.of(new SlimeBash(), new SlimeSticky())),
-                new Reward(10, List.of()));
+                new Reward(10, List.of()), 15);
     }
 }

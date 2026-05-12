@@ -29,10 +29,18 @@ public class StageContext {
     public List<BattleTurn> progressTurn(Skill skill) {
         List<BattleTurn> turns = new ArrayList<>();
 
-        BattleTurn playerTurn = battle.nextTurn(skill);
-        history.add(playerTurn);
-        turns.add(playerTurn);
-        collectIfKilled(playerTurn);
+        // 턴마다 전 참여자 MP 10 회복 (최댓값 초과 불가)
+        battle.getTurnOrder().forEach(p -> p.recoverMp(10));
+
+        if (skill != null) {
+            BattleTurn playerTurn = battle.nextTurn(skill);
+            history.add(playerTurn);
+            turns.add(playerTurn);
+            collectIfKilled(playerTurn);
+        } else {
+            // 사용 가능한 스킬 없음 → 플레이어 턴 스킵
+            battle.skipPlayerTurn();
+        }
 
         while (!battle.isFinished() && !battle.isPlayerTurn()) {
             BattleTurn monsterTurn = battle.nextTurn(null);

@@ -18,9 +18,17 @@ import java.util.Objects;
 
 @Getter
 public class Character implements HasLevel, Attackable<Skill>, Damageable, BattleParticipant {
+
+    // 레벨업 시 스탯 증가량
+    public static final int LV_ATK = 5;
+    public static final int LV_DEF = 2;
+    public static final int LV_HP  = 10;
+    public static final int LV_MP  = 5;
+
     private final String name;
-    private final int level;
-    private final Stat stat;
+    private int level;
+    private int currentExp;
+    private final Stat baseStat;
     private final Inventory inventory;
     private Job job;
     private int gold;
@@ -31,38 +39,67 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
     public Character(String name) {
         this.name = validateName(name);
         UsernameValidator.register(name);
-        this.level = 1;
-        this.stat = new Stat(0, 0, 0, 0);
-        this.inventory = new Inventory();
-        this.gold = 0;
-        this.skills = new ArrayList<>();
-        this.currentHp = 0;
-        this.currentMp = 0;
+        this.level      = 1;
+        this.currentExp = 0;
+        this.baseStat   = new Stat(0, 0, 0, 0);
+        this.inventory  = new Inventory();
+        this.gold       = 0;
+        this.skills     = new ArrayList<>();
+        this.currentHp  = 0;
+        this.currentMp  = 0;
     }
 
     public void setJob(Job job) {
-        this.job = job;
-        this.skills = new ArrayList<>(job.createSkills());
+        this.job      = job;
+        this.skills   = new ArrayList<>(job.createSkills());
         this.currentHp = getTotalStat().getHp();
         this.currentMp = getTotalStat().getMp();
     }
 
     public Stat getTotalStat() {
-        if (job == null) return stat;
+        int lv = level - 1;
+        int atkBonus = lv * LV_ATK;
+        int defBonus = lv * LV_DEF;
+        int hpBonus  = lv * LV_HP;
+        int mpBonus  = lv * LV_MP;
+
+        if (job == null) {
+            return new Stat(
+                baseStat.getPower()   + atkBonus,
+                baseStat.getDefense() + defBonus,
+                baseStat.getHp()      + hpBonus,
+                baseStat.getMp()      + mpBonus
+            );
+        }
         Stat jobStat = job.getStat();
         return new Stat(
-            stat.getPower() + jobStat.getPower(),
-            stat.getDefense() + jobStat.getDefense(),
-            stat.getHp() + jobStat.getHp(),
-            stat.getMp() + jobStat.getMp()
+            baseStat.getPower()   + jobStat.getPower()   + atkBonus,
+            baseStat.getDefense() + jobStat.getDefense() + defBonus,
+            baseStat.getHp()      + jobStat.getHp()      + hpBonus,
+            baseStat.getMp()      + jobStat.getMp()      + mpBonus
         );
     }
 
-    private String validateName(String username) {
-        if (Objects.nonNull(username) && UsernameValidator.isValid(username)) {
-            return username;
+    public int gainExp(int amount) {
+        currentExp += amount;
+        int levelsGained = 0;
+        while (currentExp >= expToNextLevel()) {
+            currentExp -= expToNextLevel();
+            levelUp();
+            levelsGained++;
         }
-        throw new IllegalArgumentException("적절하지 않은 유저 이름입니다.");
+        return levelsGained;
+    }
+
+    public int expToNextLevel() {
+        return level * 100;
+    }
+
+    private void levelUp() {
+        level++;
+        // 레벨업 시 HP/MP 일부 회복
+        currentHp = Math.min(currentHp + LV_HP, getTotalStat().getHp());
+        currentMp = Math.min(currentMp + LV_MP,  getTotalStat().getMp());
     }
 
     @Override
@@ -107,7 +144,6 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
         if (!(target instanceof BattleParticipant participant)) {
             throw new IllegalArgumentException("전투 대상이 아닙니다.");
         }
-
         consumeMp(activeSkill.getMpCost());
         int damage = BattleParticipant.calculateDamage(this, participant, activeSkill);
         target.damage(activeSkill, damage);
@@ -123,27 +159,35 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
         currentMp = getTotalStat().getMp();
     }
 
+    @Override
+    public void consumeMp(int amount) {
+        currentMp = Math.max(0, currentMp - amount);
+    }
+
+    @Override
+    public void recoverMp(int amount) {
+        currentMp = Math.min(currentMp + amount, getTotalStat().getMp());
+    }
+
+    // ── 아이템 / 보상 ─────────────────────────────────────────────────────────
+
     public void obtainItem(Item item) {
         inventory.add(item);
     }
 
     public void obtainReward(Reward reward) {
-        if (reward == null) {
-            throw new IllegalArgumentException("보상은 null일 수 없습니다.");
-        }
+        if (reward == null) throw new IllegalArgumentException("보상은 null일 수 없습니다.");
         gold += reward.gold();
         inventory.addAll(reward.items());
     }
 
     public void useItem(Item item) {
-        if (!inventory.remove(item)) {
-            throw new IllegalStateException("보유하지 않은 아이템입니다.");
-        }
+        if (!inventory.remove(item)) throw new IllegalStateException("보유하지 않은 아이템입니다.");
         item.use(this);
     }
 
-    @Override
-    public void consumeMp(int amount) {
-        currentMp = Math.max(0, currentMp - amount);
+    private String validateName(String username) {
+        if (Objects.nonNull(username) && UsernameValidator.isValid(username)) return username;
+        throw new IllegalArgumentException("적절하지 않은 유저 이름입니다.");
     }
 }

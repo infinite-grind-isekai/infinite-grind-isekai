@@ -67,6 +67,10 @@ public class DungeonManager implements Manager, Registerar {
         );
     }
 
+    public Map<DungeonKind, Dungeon> getDungeons() {
+        return java.util.Collections.unmodifiableMap(dungeons);
+    }
+
     public Dungeon getDungeon(DungeonKind kind) {
         Dungeon dungeon = dungeons.get(kind);
         if (dungeon == null) {

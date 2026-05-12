@@ -71,6 +71,10 @@ public class Battle {
         return status == BattleStatus.MONSTER_VICTORY;
     }
 
+    public void skipPlayerTurn() {
+        advanceCursor();
+    }
+
     public boolean isPlayerTurn() {
         int cursor = turnCursor;
         for (int i = 0; i < turnOrder.size(); i++) {
