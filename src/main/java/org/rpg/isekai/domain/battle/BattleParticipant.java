@@ -20,6 +20,8 @@ public interface BattleParticipant extends Damageable, HasLevel {
 
     void consumeMp(int amount);
 
+    void recoverMp(int amount);
+
     default boolean canUse(Skill skill) {
         return getSkills().contains(skill) && skill.getMpCost() <= getCurrentMp();
     }

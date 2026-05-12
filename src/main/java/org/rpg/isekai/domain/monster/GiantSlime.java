@@ -8,11 +8,10 @@ import org.rpg.isekai.domain.skill.monster.SlimeSticky;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Slime extends Monster {
-
-    public Slime() {
-        super("슬라임", 1, MonsterType.NORMAL, new Stat(5, 2, 50, 10),
+public class GiantSlime extends Monster{
+    public GiantSlime() {
+        super("자이언트 슬라임", 1, MonsterType.BOSS, new Stat(10, 2, 60, 10),
                 new ArrayList<>(List.of(new SlimeBash(), new SlimeSticky())),
-                new Reward(10, List.of()), 15);
+                new Reward(10, List.of()), 50);
     }
 }

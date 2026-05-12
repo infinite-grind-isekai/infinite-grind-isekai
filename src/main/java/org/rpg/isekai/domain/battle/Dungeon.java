@@ -1,6 +1,7 @@
 package org.rpg.isekai.domain.battle;
 
 import lombok.Getter;
+import org.rpg.isekai.domain.character.Character;
 import org.rpg.isekai.domain.skill.Skill;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public class Dungeon {
     private final DungeonDifficulty difficulty;
     private final List<BattleStage> stages;
     private int currentStageIndex;
+    private Character player;
+    private final RewardContext rewardContext = new RewardContext();
 
     public Dungeon(String name, DungeonDifficulty difficulty, List<BattleStage> stages) {
         if (name == null || name.isBlank()) {
@@ -31,12 +34,20 @@ public class Dungeon {
         validateBossStage();
     }
 
+    public void start(Character player) {
+        this.player = player;
+        getCurrentStage().start(player, rewardContext);
+    }
+
     public BattleStage getCurrentStage() {
         return stages.get(currentStageIndex);
     }
 
     public boolean isCleared() {
-        return currentStageIndex == stages.size() - 1 && getCurrentStage().isFinished() && getCurrentStage().getContext().getBattle().isPlayerVictory();
+        BattleStage current = getCurrentStage();
+        return currentStageIndex == stages.size() - 1
+                && current.isFinished()
+                && current.getContext().getBattle().isPlayerVictory();
     }
 
     public boolean isFailed() {
@@ -54,9 +65,22 @@ public class Dungeon {
 
         BattleStage stage = getCurrentStage();
         stage.next(skill);
+
         if (stage.isFinished() && stage.getContext().getBattle().isPlayerVictory() && hasNextStage()) {
             currentStageIndex++;
+            getCurrentStage().start(player, rewardContext);
         }
+    }
+
+    public Reward claimRewards() {
+        return rewardContext.claim();
+    }
+
+    public void reset() {
+        currentStageIndex = 0;
+        player = null;
+        rewardContext.clear();
+        stages.forEach(BattleStage::reset);
     }
 
     private void validateBossStage() {
