@@ -31,4 +31,12 @@ public class WeaponSlot implements Slot{
         }
         throw new IllegalArgumentException("무기 아이템이 아닌 경우 장착할 수 없습니다.");
     }
+
+    public boolean isEquipped(Item item) {
+        return weapon != null && weapon.equals(item);
+    }
+
+    public void unequip() {
+        this.weapon = null;
+    }
 }

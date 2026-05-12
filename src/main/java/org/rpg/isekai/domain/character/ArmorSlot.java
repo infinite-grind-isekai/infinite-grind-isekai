@@ -29,4 +29,14 @@ public class ArmorSlot implements Slot {
         }
         return stat;
     }
+
+    public boolean isEquipped(Item item) {
+        return armorItems.containsValue(item);
+    }
+
+    public void unequip(Item item) {
+        if (item instanceof ArmorItem armorItem) {
+            armorItems.remove(armorItem.getArmorType(), armorItem);
+        }
+    }
 }

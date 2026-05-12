@@ -31,5 +31,19 @@ public class Loadout {
         }
     }
 
+    public boolean isEquipped(Item item) {
+        if (item instanceof WeaponItem) return weaponSlot.isEquipped(item);
+        if (item instanceof ArmorItem) return armorSlots.isEquipped(item);
+        return false;
+    }
+
+    public void unequip(Item item) {
+        if (item instanceof WeaponItem && weaponSlot.isEquipped(item)) {
+            weaponSlot.unequip();
+        } else if (item instanceof ArmorItem) {
+            armorSlots.unequip(item);
+        }
+    }
+
 
 }

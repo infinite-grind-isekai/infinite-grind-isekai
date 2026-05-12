@@ -95,31 +95,45 @@ public class GameMenuView {
 
     // ── 인벤토리 ────────────────────────────────────────────────────────────────
 
-    public static void showInventory(Character ch) {
-        ConsoleUtils.clear();
-        List<Item> items = ch.getInventory().getItems();
+    public static int showInventory(Character ch) {
+        while (true) {
+            ConsoleUtils.clear();
+            List<Item> items = ch.getInventory().getItems();
 
-        System.out.println();
-        System.out.println("     ┌───────────────────────────────────────────────────────┐");
-        System.out.println("     │                    [ 인 벤 토 리 ]                    │");
-        System.out.println("     ├──────┬────────────────────────┬────────────┬──────────┤");
-        System.out.println("     │  No  │  아이템 이름           │  종류      │  가격    │");
-        System.out.println("     ├──────┼────────────────────────┼────────────┼──────────┤");
+            System.out.println();
+            System.out.println("     ┌───────────────────────────────────────────────────────┐");
+            System.out.println("     │                    [ 인 벤 토 리 ]                    │");
+            System.out.println("     ├──────┬────────────────────────┬────────────┬──────────┤");
+            System.out.println("     │  No  │  아이템 이름           │  종류      │  가격    │");
+            System.out.println("     ├──────┼────────────────────────┼────────────┼──────────┤");
 
-        if (items.isEmpty()) {
-            System.out.println("     │               보유한 아이템이 없습니다.               │");
-        } else {
-            for (int i = 0; i < items.size(); i++) {
-                Item item = items.get(i);
-                System.out.printf("     │  %-4d│  %-22s  │  %-8s  │  %4d G  │%n",
-                        i + 1, item.getName(), item.getType().name(), item.getPrice());
+            if (items.isEmpty()) {
+                System.out.println("     │               보유한 아이템이 없습니다.               │");
+            } else {
+                for (int i = 0; i < items.size(); i++) {
+                    Item item = items.get(i);
+                    System.out.printf("     │  %-4d│  %-22s  │  %-8s  │  %4d G  │%n",
+                            i + 1, item.getName(), item.getType().name(), item.getPrice());
+                }
             }
-        }
 
-        System.out.println("     └──────┴────────────────────────┴────────────┴──────────┘");
-        System.out.println();
-        System.out.print("     [ ENTER 를 눌러 돌아가기 ]");
-        ConsoleUtils.SCANNER.nextLine();
+            System.out.println("     ├──────┴────────────────────────┴────────────┴──────────┤");
+            System.out.println("     │    0.  돌아가기                                        │");
+            System.out.println("     └───────────────────────────────────────────────────────┘");
+            System.out.println();
+            System.out.print("     사용할 아이템 번호 > ");
+
+            String input = ConsoleUtils.SCANNER.nextLine().trim();
+            if (input.equals("0")) return -1;
+
+            try {
+                int idx = Integer.parseInt(input) - 1;
+                if (idx >= 0 && idx < items.size()) return idx;
+            } catch (NumberFormatException ignored) {}
+
+            System.out.println("     [ ! ] 올바른 번호를 입력하세요.");
+            ConsoleUtils.sleep(700);
+        }
     }
 
     // ── 던전 목록 ───────────────────────────────────────────────────────────────

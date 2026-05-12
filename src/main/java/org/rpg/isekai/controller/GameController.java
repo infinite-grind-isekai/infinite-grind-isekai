@@ -61,11 +61,24 @@ public class GameController implements Starter {
             int choice = GameMenuView.showMainMenu(character);
             switch (choice) {
                 case 1 -> GameMenuView.showCharacterInfo(character);
-                case 2 -> GameMenuView.showInventory(character);
+                case 2 -> manageInventory(character);
                 case 3 -> selectAndPlayDungeon(character);
                 case 4 -> enterStore(character);
                 case 0 -> { return; }
             }
+        }
+    }
+
+    private void manageInventory(Character character) {
+        while (true) {
+            int itemIdx = GameMenuView.showInventory(character);
+            if (itemIdx == -1) break;
+
+            Item selected = character.getInventory().getItems().get(itemIdx);
+            selected.use(character);
+
+            System.out.println("     [ + ] " + selected.getName() + "을(를) 사용(장착)했습니다.");
+            ConsoleUtils.sleep(1000);
         }
     }
 
@@ -103,6 +116,12 @@ public class GameController implements Starter {
 
             int sellPrice = selected.getPrice() / 2;
             character.setGold(character.getGold() + sellPrice);
+            
+            // 만약 장착 중인 아이템이라면 장착 해제
+            if (character.getLoadout().isEquipped(selected)) {
+                character.unequip(selected);
+            }
+            
             character.getInventory().remove(selected);
             System.out.println("     [ + ] " + selected.getName() + "을(를) " + sellPrice + " G에 판매했습니다.");
             ConsoleUtils.sleep(1000);
