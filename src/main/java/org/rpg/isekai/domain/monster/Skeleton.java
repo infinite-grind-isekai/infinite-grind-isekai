@@ -1,10 +1,9 @@
 package org.rpg.isekai.domain.monster;
 
+import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.character.Stat;
-import org.rpg.isekai.domain.iface.Damageable;
-import org.rpg.isekai.domain.skill.Skill;
-import org.rpg.isekai.domain.skill.monster.HeavyBash;
 import org.rpg.isekai.domain.skill.monster.BoneFragments;
+import org.rpg.isekai.domain.skill.monster.HeavyBash;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +11,8 @@ import java.util.List;
 public class Skeleton extends Monster {
 
     public Skeleton() {
-        super("스켈레톤", 1, MonsterType.NORMAL, new Stat(8, 3, 30, 0), new ArrayList<>(List.of(new HeavyBash(), new BoneFragments())));
-    }
-
-    @Override
-    public int getDamage(Skill skill) {
-        return 5;
+        super("스켈레톤", 1, MonsterType.NORMAL, new Stat(8, 3, 30, 0),
+                new ArrayList<>(List.of(new HeavyBash(), new BoneFragments())),
+                new Reward(20, List.of()));
     }
 }

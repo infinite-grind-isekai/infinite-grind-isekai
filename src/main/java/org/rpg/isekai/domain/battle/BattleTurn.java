@@ -1,14 +1,12 @@
 package org.rpg.isekai.domain.battle;
 
-import org.rpg.isekai.domain.iface.Attackable;
-import org.rpg.isekai.domain.iface.Damageable;
-import org.rpg.isekai.domain.skill.Skill;
+import org.rpg.isekai.domain.skill.ActiveSkill;
 
 public record BattleTurn(
         int round,
-        Attackable attacker,
-        Damageable target,
-        Skill skill,
+        BattleParticipant attacker,
+        BattleParticipant target,
+        ActiveSkill skill,
         int damage,
         boolean targetDead,
         BattleStatus status

@@ -22,7 +22,9 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
     private final MonsterType type;
     private final Stat stat;
     private final List<Skill> skills;
-    private final Reward reward;
+
+    private Reward reward;
+
     private int currentHp;
     private int currentMp;
 
@@ -66,6 +68,11 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
         if (!canUse(activeSkill)) {
             throw new IllegalStateException("사용할 수 없는 스킬입니다.");
         }
+
+        if (MonsterType.BOSS.equals(type)) {
+            return (int) ((getAttackPower() + activeSkill.getDamage()) * 0.8);
+        }
+
         return getAttackPower() + activeSkill.getDamage();
     }
 

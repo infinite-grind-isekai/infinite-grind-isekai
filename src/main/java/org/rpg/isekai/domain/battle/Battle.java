@@ -8,6 +8,7 @@ import org.rpg.isekai.domain.skill.Skill;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Getter
 public class Battle {
@@ -53,7 +54,7 @@ public class Battle {
         boolean targetDead = target.isDead();
         updateStatus();
 
-        BattleTurn turn = new BattleTurn(round, actor.getName(), target.getName(), skill.getName(), damage, targetDead, status);
+        BattleTurn turn = new BattleTurn(round, actor, target, skill, damage, targetDead, status);
         advanceCursor();
         return turn;
     }
@@ -68,6 +69,18 @@ public class Battle {
 
     public boolean isMonsterVictory() {
         return status == BattleStatus.MONSTER_VICTORY;
+    }
+
+    public boolean isPlayerTurn() {
+        int cursor = turnCursor;
+        for (int i = 0; i < turnOrder.size(); i++) {
+            BattleParticipant p = turnOrder.get(cursor);
+            if (!p.isDead()) {
+                return p == player;
+            }
+            cursor = (cursor + 1) % turnOrder.size();
+        }
+        return false;
     }
 
     public List<Monster> getAliveMonsters() {
@@ -124,9 +137,11 @@ public class Battle {
             return activeSkill;
         }
 
-        return actor.getUsableSkills().stream()
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("몬스터가 사용할 수 있는 액티브 스킬이 없습니다."));
+        List<ActiveSkill> usable = actor.getUsableSkills();
+        if (usable.isEmpty()) {
+            throw new IllegalStateException("몬스터가 사용할 수 있는 액티브 스킬이 없습니다.");
+        }
+        return usable.get(new Random().nextInt(usable.size()));
     }
 
     private void updateStatus() {
