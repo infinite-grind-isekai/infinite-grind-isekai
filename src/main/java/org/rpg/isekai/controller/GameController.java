@@ -2,6 +2,11 @@ package org.rpg.isekai.controller;
 
 import org.rpg.isekai.domain.battle.*;
 import org.rpg.isekai.domain.character.Character;
+import org.rpg.isekai.domain.item.AmorItem.*;
+import org.rpg.isekai.domain.item.Item;
+import org.rpg.isekai.domain.item.MaterialItem.*;
+import org.rpg.isekai.domain.item.PotionItem.*;
+import org.rpg.isekai.domain.item.WeaponItem.*;
 import org.rpg.isekai.domain.job.Job;
 import org.rpg.isekai.domain.monster.Monster;
 import org.rpg.isekai.domain.skill.ActiveSkill;
@@ -55,8 +60,53 @@ public class GameController implements Starter {
                 case 1 -> GameMenuView.showCharacterInfo(character);
                 case 2 -> GameMenuView.showInventory(character);
                 case 3 -> selectAndPlayDungeon(character);
+                case 4 -> enterStore(character);
                 case 0 -> { return; }
             }
+        }
+    }
+
+    private void enterStore(Character character) {
+        // 상점에서 판매할 아이템 목록 생성 (모든 아이템 추가)
+        List<Item> storeItems = List.of(
+                // 포션류
+                new HealthPotion(),
+                new ManaPotion(),
+                new EnergyDrink(),
+                new HeartOfDragon(),
+                new PhoenixFeather(),
+                // 무기류
+                new IronSword(),
+                new MagicStaff(),
+                new DoomBringer(),
+                new ShadowReaper(),
+                new ThunderstrikeDagger(),
+                // 방어구류
+                new LeatherArmor(),
+                new IronPlate(),
+                new TitanArmor(),
+                new FrostguardShield(),
+                new DragonScaleMail(),
+                // 재료류
+                new SlimeJelly(),
+                new SkeletonBone(),
+                new GoblinEar(),
+                new OrcTooth(),
+                new DragonScale()
+        );
+
+        while (true) {
+            Item selected = GameMenuView.showItemStore(character, storeItems);
+            if (selected == null) break;
+
+            if (character.getGold() >= selected.getPrice()) {
+                character.setGold(character.getGold() - selected.getPrice());
+                character.obtainItem(selected);
+                System.out.println("     [ + ] " + selected.getName() + "을(를) 구매했습니다.");
+            } else {
+                System.out.println("     [ ! ] 골드가 부족합니다.");
+            }
+            ConsoleUtils.sleep(1000);
         }
     }
 

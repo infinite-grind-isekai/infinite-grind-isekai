@@ -26,6 +26,7 @@ public class GameMenuView {
             System.out.println("     ║    1.  내 정보 보기                                   ║");
             System.out.println("     ║    2.  인벤토리                                       ║");
             System.out.println("     ║    3.  던전 입장                                      ║");
+            System.out.println("     ║    4.  상점 입장                                      ║");
             System.out.println("     ║                                                       ║");
             System.out.println("     ║    0.  게임 종료                                      ║");
             System.out.println("     ║                                                       ║");
@@ -35,7 +36,7 @@ public class GameMenuView {
 
             String input = ConsoleUtils.SCANNER.nextLine().trim();
             switch (input) {
-                case "1", "2", "3", "0" -> { return Integer.parseInt(input); }
+                case "1", "2", "3", "4", "0" -> { return Integer.parseInt(input); }
                 default -> {
                     System.out.println("     [ ! ] 올바른 번호를 입력하세요.");
                     ConsoleUtils.sleep(700);
@@ -162,6 +163,47 @@ public class GameMenuView {
             ConsoleUtils.sleep(700);
         }
     }
+
+    // ── 상점 목록 ───────────────────────────────────────────────────────────────
+
+    public static Item showItemStore(Character ch, List<Item> storeItems) {
+        while (true) {
+            ConsoleUtils.clear();
+            printStatusHeader(ch);
+            System.out.println("     ┌───────────────────────────────────────────────────────┐");
+            System.out.println("     │                    [ 마 을 상 점 ]                    │");
+            System.out.println("     ├──────┬────────────────────────┬────────────┬──────────┤");
+            System.out.println("     │  No  │  아이템 이름           │  종류      │  가격    │");
+            System.out.println("     ├──────┼────────────────────────┼────────────┼──────────┤");
+
+            for (int i = 0; i < storeItems.size(); i++) {
+                Item item = storeItems.get(i);
+                System.out.printf("     │  %-4d│  %-22s  │  %-8s  │  %4d G  │%n",
+                        i + 1, item.getName(), item.getType().name(), item.getPrice());
+            }
+
+            System.out.println("     ├──────┴────────────────────────┴────────────┴──────────┤");
+            System.out.println("     │    0.  돌아가기                                        │");
+            System.out.println("     └───────────────────────────────────────────────────────┘");
+            System.out.println();
+            System.out.print("     구매할 아이템 번호 > ");
+
+            String input = ConsoleUtils.SCANNER.nextLine().trim();
+
+            if (input.equals("0")) return null;
+
+            try {
+                int idx = Integer.parseInt(input) - 1;
+                if (idx >= 0 && idx < storeItems.size()) {
+                    return storeItems.get(idx);
+                }
+            } catch (NumberFormatException ignored) {}
+
+            System.out.println("     [ ! ] 올바른 번호를 입력하세요.");
+            ConsoleUtils.sleep(700);
+        }
+    }
+
 
     // ── 공통 렌더링 헬퍼 ────────────────────────────────────────────────────────
 

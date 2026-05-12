@@ -145,9 +145,11 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
         currentMp = getTotalStat().getMp();
     }
 
-    // ── 아이템 / 보상 ─────────────────────────────────────────────────────────
 
-    public void obtainItem(Item item)    { inventory.add(item); }
+    public void obtainItem(Item item) {
+        inventory.add(item);
+    }
+
     public void obtainReward(Reward reward) {
         if (reward == null) throw new IllegalArgumentException("보상은 null일 수 없습니다.");
         gold += reward.gold();
@@ -161,5 +163,9 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
     private String validateName(String username) {
         if (Objects.nonNull(username) && UsernameValidator.isValid(username)) return username;
         throw new IllegalArgumentException("적절하지 않은 유저 이름입니다.");
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 }
