@@ -11,7 +11,7 @@ public class Warrior extends Job {
 
     public Warrior() {
         this.name = JobKind.WARRIOR.getName();
-        this.stat = new Stat(40, 0, 0, 120, 30);
+        this.stat = new Stat(40, 0.0, 0, 120, 30);
         this.jobKind = JobKind.WARRIOR;
     }
 
