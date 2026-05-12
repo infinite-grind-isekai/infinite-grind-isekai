@@ -2,8 +2,10 @@ package org.rpg.isekai.domain.battle;
 
 import lombok.Getter;
 import org.rpg.isekai.domain.character.Character;
+import org.rpg.isekai.domain.item.Item;
 import org.rpg.isekai.domain.skill.Skill;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -12,6 +14,7 @@ public class Dungeon {
     private final DungeonDifficulty difficulty;
     private final List<BattleStage> stages;
     private int currentStageIndex;
+    private double dropRatio = 0.1;
     private Character player;
     private final RewardContext rewardContext = new RewardContext();
 
@@ -73,7 +76,14 @@ public class Dungeon {
     }
 
     public Reward claimRewards() {
-        return rewardContext.claim();
+        Reward raw = rewardContext.claim();
+        List<Item> dropped = new ArrayList<>();
+        for (Item item : raw.items()) {
+            if (Math.random() < dropRatio) {
+                dropped.add(item);
+            }
+        }
+        return new Reward(raw.gold(), dropped);
     }
 
     public void reset() {

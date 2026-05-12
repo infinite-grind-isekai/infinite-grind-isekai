@@ -10,8 +10,9 @@ import java.util.List;
 public class Gunslinger extends Job {
 
     public Gunslinger() {
-        this.name = "건슬링어";
-        this.stat = new Stat(45, 0, 85, 50);
+        this.name = JobKind.GUNSLINGER.getName();
+        this.stat = new Stat(45, 0.10, 0, 85, 50);
+        this.jobKind = JobKind.GUNSLINGER;
     }
 
     @Override
