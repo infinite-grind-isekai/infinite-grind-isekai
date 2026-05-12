@@ -11,7 +11,7 @@ public class Gunslinger extends Job {
 
     public Gunslinger() {
         this.name = JobKind.GUNSLINGER.getName();
-        this.stat = new Stat(45, 10.0, 0, 85, 50);
+        this.stat = new Stat(45, 0.10, 0, 85, 50);
         this.jobKind = JobKind.GUNSLINGER;
     }
 

@@ -48,13 +48,16 @@ public class Battle {
         BattleParticipant actor = getCurrentActor();
         BattleParticipant target = resolveTarget(actor);
         ActiveSkill skill = resolveSkill(actor, selectedSkill);
-        int damage = BattleParticipant.calculateDamage(actor, target, skill);
 
-        performAttack(actor, skill, target);
+        // 크리티컬 판정은 턴당 정확히 한 번만 수행
+        boolean critical = (actor instanceof Character ch) && ch.rollCritical();
+        int damage = calculateFinalDamage(actor, target, skill, critical);
+
+        applyAttack(actor, skill, target, damage);
         boolean targetDead = target.isDead();
         updateStatus();
 
-        BattleTurn turn = new BattleTurn(round, actor, target, skill, damage, targetDead, status);
+        BattleTurn turn = new BattleTurn(round, actor, target, skill, damage, critical, targetDead, status);
         advanceCursor();
         return turn;
     }
@@ -118,16 +121,14 @@ public class Battle {
         return player;
     }
 
-    private void performAttack(BattleParticipant actor, ActiveSkill skill, BattleParticipant target) {
-        if (actor instanceof Character character) {
-            character.attack(skill, target);
-            return;
-        }
-        if (actor instanceof Monster monster) {
-            monster.attack(skill, target);
-            return;
-        }
-        throw new IllegalStateException("지원하지 않는 전투 참여자입니다.");
+    private static int calculateFinalDamage(BattleParticipant actor, BattleParticipant target, ActiveSkill skill, boolean critical) {
+        int base = Math.max(1, actor.getAttackPower() + skill.getDamage() - target.getDefensePower());
+        return critical ? base * 2 : base;
+    }
+
+    private void applyAttack(BattleParticipant actor, ActiveSkill skill, BattleParticipant target, int damage) {
+        actor.consumeMp(skill.getMpCost());
+        target.damage(skill, damage);
     }
 
     private ActiveSkill resolveSkill(BattleParticipant actor, Skill selectedSkill) {

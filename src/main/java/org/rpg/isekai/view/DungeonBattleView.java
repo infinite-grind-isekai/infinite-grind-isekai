@@ -104,13 +104,15 @@ public class DungeonBattleView {
         for (BattleTurn turn : turns) {
             boolean isMonster = turn.attacker() instanceof Monster;
             String tag  = isMonster ? "⚔ 몬스터  " : "★ 플레이어";
-            String dead = turn.targetDead() ? "  ☠ 사망!" : "";
-            System.out.printf("     %s │ %s → %s │ %s │ 데미지 %d%s%n",
+            String crit = turn.critical()    ? "  ★ CRITICAL!" : "";
+            String dead = turn.targetDead()  ? "  ☠ 사망!"     : "";
+            System.out.printf("     %s │ %s → %s │ %s │ 데미지 %d%s%s%n",
                     tag,
                     turn.attacker().getName(),
                     turn.target().getName(),
                     turn.skill().getName(),
                     turn.damage(),
+                    crit,
                     dead);
         }
         System.out.println("     ─────────────────────────────────────────────────────────");
