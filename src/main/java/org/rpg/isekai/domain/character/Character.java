@@ -3,6 +3,7 @@ package org.rpg.isekai.domain.character;
 import lombok.Getter;
 import org.rpg.isekai.domain.battle.BattleParticipant;
 import org.rpg.isekai.domain.battle.Reward;
+import org.rpg.isekai.domain.battle.SkillCoolDownContext;
 import org.rpg.isekai.domain.iface.Attackable;
 import org.rpg.isekai.domain.iface.Damageable;
 import org.rpg.isekai.domain.iface.HasLevel;
@@ -30,6 +31,7 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
     private final Stat baseStat;
     private final Inventory inventory;
     private final Loadout loadout;
+    private final SkillCoolDownContext coolDownContext = new SkillCoolDownContext();
     private Job job;
     private int gold;
     private List<Skill> skills;
@@ -93,12 +95,15 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
         currentMp = Math.min(currentMp + LV_MP, getTotalStat().getMp());
     }
 
-    // ── 크리티컬 ──────────────────────────────────────────────────────────────
+    // ── 크리티컬 / 쿨다운 ────────────────────────────────────────────────────
 
     /** 크리티컬 여부를 한 번만 결정한다. Battle에서 턴당 정확히 1회 호출할 것. */
     public boolean rollCritical() {
         return Math.random() < getTotalStat().getCritical();
     }
+
+    @Override
+    public SkillCoolDownContext getCoolDownContext() { return coolDownContext; }
 
     // ── BattleParticipant ─────────────────────────────────────────────────────
 

@@ -29,8 +29,11 @@ public class StageContext {
     public List<BattleTurn> progressTurn(Skill skill) {
         List<BattleTurn> turns = new ArrayList<>();
 
-        // 턴마다 전 참여자 MP 10 회복 (최댓값 초과 불가)
-        battle.getTurnOrder().forEach(p -> p.recoverMp(10));
+        // 턴 시작: MP 회복 + 쿨다운 감소
+        battle.getTurnOrder().forEach(p -> {
+            p.recoverMp(10);
+            p.getCoolDownContext().tick();
+        });
 
         if (skill != null) {
             BattleTurn playerTurn = battle.nextTurn(skill);

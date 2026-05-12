@@ -15,9 +15,12 @@ public class Battle {
     private final Character player;
     private final List<Monster> monsters;
     private final List<BattleParticipant> turnOrder;
+    private final SkillCoolDownContext skillCoolDownContext;
     private BattleStatus status;
     private int round;
     private int turnCursor;
+
+
 
     public Battle(Character player, List<Monster> monsters) {
         if (player == null) {
@@ -28,6 +31,7 @@ public class Battle {
         }
         this.player = player;
         this.monsters = List.copyOf(monsters);
+        this.skillCoolDownContext = new SkillCoolDownContext();
         this.turnOrder = new ArrayList<>();
         this.turnOrder.add(player);
         this.turnOrder.addAll(monsters);
@@ -47,7 +51,13 @@ public class Battle {
 
         BattleParticipant actor = getCurrentActor();
         BattleParticipant target = resolveTarget(actor);
+
+        if (!skillCoolDownContext.isReady(selectedSkill)) {
+           throw new IllegalStateException("지금은 스킬 시전이 불가능합니다.");
+        };
+
         ActiveSkill skill = resolveSkill(actor, selectedSkill);
+        skillCoolDownContext.addSkillCoolDown(skill);
 
         // 크리티컬 판정은 턴당 정확히 한 번만 수행
         boolean critical = (actor instanceof Character ch) && ch.rollCritical();
@@ -59,6 +69,8 @@ public class Battle {
 
         BattleTurn turn = new BattleTurn(round, actor, target, skill, damage, critical, targetDead, status);
         advanceCursor();
+
+        skillCoolDownContext.tick();
         return turn;
     }
 
@@ -128,6 +140,7 @@ public class Battle {
 
     private void applyAttack(BattleParticipant actor, ActiveSkill skill, BattleParticipant target, int damage) {
         actor.consumeMp(skill.getMpCost());
+        actor.getCoolDownContext().register(skill);
         target.damage(skill, damage);
     }
 
@@ -136,7 +149,7 @@ public class Battle {
             if (!(selectedSkill instanceof ActiveSkill activeSkill)) {
                 throw new IllegalArgumentException("플레이어 턴에는 액티브 스킬을 선택해야 합니다.");
             }
-            if (!actor.canUse(activeSkill)) {
+            if (!actor.canUse(activeSkill, )) {
                 throw new IllegalStateException("현재 사용할 수 없는 플레이어 스킬입니다.");
             }
             return activeSkill;

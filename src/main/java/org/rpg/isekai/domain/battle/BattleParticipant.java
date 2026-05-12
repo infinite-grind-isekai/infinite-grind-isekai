@@ -22,8 +22,12 @@ public interface BattleParticipant extends Damageable, HasLevel {
 
     void recoverMp(int amount);
 
+    SkillCoolDownContext getCoolDownContext();
+
     default boolean canUse(Skill skill) {
-        return getSkills().contains(skill) && skill.getMpCost() <= getCurrentMp();
+        return getSkills().contains(skill)
+            && skill.getMpCost() <= getCurrentMp()
+            && getCoolDownContext().isReady(skill);
     }
 
     default List<ActiveSkill> getUsableSkills() {

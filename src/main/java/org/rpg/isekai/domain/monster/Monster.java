@@ -1,10 +1,10 @@
 package org.rpg.isekai.domain.monster;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.rpg.isekai.domain.battle.BattleParticipant;
 import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.battle.Rewardable;
+import org.rpg.isekai.domain.battle.SkillCoolDownContext;
 import org.rpg.isekai.domain.character.Stat;
 import org.rpg.isekai.domain.iface.Attackable;
 import org.rpg.isekai.domain.iface.Damageable;
@@ -15,7 +15,6 @@ import org.rpg.isekai.domain.skill.Skill;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
 public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleParticipant, Rewardable {
     private final String name;
     private final int level;
@@ -26,6 +25,23 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
     private final int exp;
     private int currentHp;
     private int currentMp;
+    private final SkillCoolDownContext coolDownContext = new SkillCoolDownContext();
+
+    // ── 생성자 체인 ────────────────────────────────────────────────────────────
+
+    public Monster(String name, int level, MonsterType type, Stat stat,
+                   List<Skill> skills, Reward reward, int exp,
+                   int currentHp, int currentMp) {
+        this.name      = name;
+        this.level     = level;
+        this.type      = type;
+        this.stat      = stat;
+        this.skills    = List.copyOf(skills);
+        this.reward    = reward;
+        this.exp       = exp;
+        this.currentHp = currentHp;
+        this.currentMp = currentMp;
+    }
 
     public Monster(String name, int level, MonsterType type, Stat stat) {
         this(name, level, type, stat, List.of(), Reward.empty(), 0);
@@ -43,25 +59,22 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
         this(name, level, type, stat, skills, reward, exp, stat.getHp(), stat.getMp());
     }
 
-    @Override
-    public int getHealth() {
-        return currentHp;
-    }
+    // ── BattleParticipant ─────────────────────────────────────────────────────
 
     @Override
-    public int getAttackPower() {
-        return stat.getPower();
-    }
+    public int getHealth() { return currentHp; }
 
     @Override
-    public int getDefensePower() {
-        return stat.getDefense();
-    }
+    public int getAttackPower() { return stat.getPower(); }
 
     @Override
-    public int getCurrentMp() {
-        return currentMp;
-    }
+    public int getDefensePower() { return stat.getDefense(); }
+
+    @Override
+    public int getCurrentMp() { return currentMp; }
+
+    @Override
+    public SkillCoolDownContext getCoolDownContext() { return coolDownContext; }
 
     @Override
     public int getDamage(Skill skill) {
@@ -94,22 +107,14 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
     }
 
     @Override
-    public void damage(Skill skill, int damage) {
-        currentHp = Math.max(0, currentHp - damage);
-    }
+    public void damage(Skill skill, int damage) { currentHp = Math.max(0, currentHp - damage); }
 
     @Override
-    public Reward dropReward() {
-        return reward;
-    }
+    public Reward dropReward() { return reward; }
 
     @Override
-    public void consumeMp(int amount) {
-        currentMp = Math.max(0, currentMp - amount);
-    }
+    public void consumeMp(int amount) { currentMp = Math.max(0, currentMp - amount); }
 
     @Override
-    public void recoverMp(int amount) {
-        currentMp = Math.min(currentMp + amount, stat.getMp());
-    }
+    public void recoverMp(int amount) { currentMp = Math.min(currentMp + amount, stat.getMp()); }
 }

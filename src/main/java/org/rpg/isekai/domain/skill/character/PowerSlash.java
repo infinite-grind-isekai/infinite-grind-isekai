@@ -4,6 +4,6 @@ import org.rpg.isekai.domain.skill.ActiveSkill;
 
 public class PowerSlash extends ActiveSkill {
     public PowerSlash() {
-        super("파워 슬래시", 10, 1, 30);
+        super("파워 슬래시", 10, 0, 30);
     }
 }
