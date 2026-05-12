@@ -1,7 +1,9 @@
-package org.rpg.isekai.domain.item;
+package org.rpg.isekai.domain.item.WeaponItem;
 
 import lombok.Getter;
 import org.rpg.isekai.domain.character.Character;
+import org.rpg.isekai.domain.item.Item;
+import org.rpg.isekai.domain.item.ItemType;
 
 @Getter
 public class WeaponItem extends Item {

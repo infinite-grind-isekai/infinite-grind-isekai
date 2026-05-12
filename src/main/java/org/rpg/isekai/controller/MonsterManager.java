@@ -29,6 +29,10 @@ public class MonsterManager implements Manager {
         factories.put(Orc.class, Orc::new);
         factories.put(AncientDragon.class, AncientDragon::new);
         factories.put(GiantSlime.class, GiantSlime::new);
+        factories.put(Harpy.class, Harpy::new);
+        factories.put(Golem.class, Golem::new);
+        factories.put(Werewolf.class, Werewolf::new);
+        factories.put(Vampire.class, Vampire::new);
     }
 
     public Supplier<Monster> getFactory(Class<? extends Monster> type) {
