@@ -11,4 +11,9 @@ public non-sealed class Game implements Endable {
     public void end() {
         gameStatus = GameStatus.END;
     }
+
+    @Override
+    public boolean isEnd() {
+        return gameStatus == GameStatus.END;
+    }
 }
