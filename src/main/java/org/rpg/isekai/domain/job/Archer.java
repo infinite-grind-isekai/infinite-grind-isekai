@@ -11,7 +11,7 @@ public class Archer extends Job {
 
     public Archer() {
         this.name = JobKind.ARCHER.getName();
-        this.stat = new Stat(35, 20.0, 0, 90, 60);
+        this.stat = new Stat(35, 0.20, 0, 90, 60);
         this.jobKind = JobKind.ARCHER;
     }
 

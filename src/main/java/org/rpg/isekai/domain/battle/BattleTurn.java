@@ -8,6 +8,7 @@ public record BattleTurn(
         BattleParticipant target,
         ActiveSkill skill,
         int damage,
+        boolean critical,
         boolean targetDead,
         BattleStatus status
 ) {

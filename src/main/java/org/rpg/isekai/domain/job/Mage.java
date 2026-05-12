@@ -11,7 +11,7 @@ public class Mage extends Job {
 
     public Mage() {
         this.name = JobKind.MAGE.getName();
-        this.stat = new Stat(20, 5.0, 0, 70, 120);
+        this.stat = new Stat(20, 0.05, 0, 70, 120);
         this.jobKind = JobKind.MAGE;
     }
 

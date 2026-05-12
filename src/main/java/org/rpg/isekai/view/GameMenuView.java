@@ -60,6 +60,7 @@ public class GameMenuView {
         System.out.println("     ├───────────────────────────────────────────────────────┤");
         System.out.println("     │   [ 스탯 ]                                            │");
         System.out.printf( "     │   공격력   :  %-38s│%n", total.getPower());
+        System.out.printf( "     │   크리티컬   :  %-38s│%n", total.getCritical());
         System.out.printf( "     │   방어력   :  %-38s│%n", total.getDefense());
         System.out.printf( "     │   HP       :  %3d / %3d  [%s]│%n",
                 ch.getCurrentHp(), total.getHp(), bar(ch.getCurrentHp(), total.getHp()));
