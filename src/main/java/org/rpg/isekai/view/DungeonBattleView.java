@@ -397,6 +397,7 @@ public class DungeonBattleView {
             case "Slime"         -> "(.~.)";
             case "GiantSlime"    -> "(o~o)";
             case "Skeleton"      -> "(x_x)";
+            case "MegaSkeleton"  -> "(-_z)";
             case "Goblin"        -> "(>.>)";
             case "Orc"           -> "(O_O)";
             case "AncientDragon" -> "(◆_◆)";
@@ -424,6 +425,14 @@ public class DungeonBattleView {
                 "    --^--",
                 "   /|   |\\",
                 "    |___|"
+            };
+            case "MegaSkeleton" -> new String[]{
+                    "   _  ____  _",
+                    "  | |_|oo|_| |",
+                    "  |__/====\\__|",
+                    "   /|__||__|\\",
+                    "    |__||__|",
+                    "    /__||__\\"
             };
             case "Goblin" -> new String[]{
                 "   /\\  /\\",

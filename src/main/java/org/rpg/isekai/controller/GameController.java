@@ -54,6 +54,7 @@ public class GameController implements Starter {
 
         Character character = new Character(name);
         character.setJob(job);
+        initialManager.prepareForJob(job);
 
         for (Item item : initialManager.getInitialItems()) {
             character.obtainItem(item);

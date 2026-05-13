@@ -65,7 +65,7 @@ public class GameMenuView {
         System.out.println("     ├───────────────────────────────────────────────────────┤");
         System.out.println("     │   [ 스탯 ]                                            │");
         System.out.printf( "     │   공격력   :  %-38s│%n", total.getPower());
-        System.out.printf( "     │   크리티컬   :  %-38s│%n", total.getCritical());
+        System.out.printf( "     │   크리티컬   :  %-38s│%n", total.getCritical() * 100);
         System.out.printf( "     │   방어력   :  %-38s│%n", total.getDefense());
         System.out.printf( "     │   HP       :  %3d / %3d  [%s]│%n",
                 ch.getCurrentHp(), total.getHp(), bar(ch.getCurrentHp(), total.getHp()));
@@ -114,7 +114,7 @@ public class GameMenuView {
             System.out.println("     │     (미착용)                                          │");
         } else {
             System.out.printf("     │     %-14s  공격력 +%-3d  크리티컬 +%-4.0f%%         │%n",
-                    weapon.getName(), weapon.getAttackPower(), weapon.getCritical());
+                    weapon.getName(), weapon.getAttackPower(), weapon.getCritical() * 100);
         }
 
         System.out.println("     ├───────────────────────────────────────────────────────┤");

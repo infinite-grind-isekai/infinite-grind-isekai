@@ -34,6 +34,11 @@ public class ItemManager implements Manager{
                 new TitanArmor(),
                 new FrostguardShield(),
                 new DragonScaleMail(),
+
+                new Circlet(),
+                new Greaves(),
+                new Gauntlet(),
+
                 // 재료류
                 new SlimeJelly(),
                 new SkeletonBone(),

@@ -3,7 +3,6 @@ package org.rpg.isekai.controller;
 import org.rpg.isekai.domain.monster.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -33,6 +32,7 @@ public class MonsterManager implements Manager {
         factories.put(Golem.class, Golem::new);
         factories.put(Werewolf.class, Werewolf::new);
         factories.put(Vampire.class, Vampire::new);
+        factories.put(MegaSkeleton.class, MegaSkeleton::new);
     }
 
     public Supplier<Monster> getFactory(Class<? extends Monster> type) {

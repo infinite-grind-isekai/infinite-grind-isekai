@@ -2,6 +2,7 @@ package org.rpg.isekai.domain.monster;
 
 import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.character.Stat;
+import org.rpg.isekai.domain.item.amorItem.Greaves;
 import org.rpg.isekai.domain.item.amorItem.TitanArmor;
 import org.rpg.isekai.domain.item.materialItem.SkeletonBone;
 import org.rpg.isekai.domain.item.potionItem.HealthPotion;
