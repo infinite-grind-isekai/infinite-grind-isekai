@@ -2,6 +2,9 @@ package org.rpg.isekai.view;
 
 import org.rpg.isekai.domain.battle.*;
 import org.rpg.isekai.domain.character.Character;
+import org.rpg.isekai.domain.item.Item;
+import org.rpg.isekai.domain.item.potionItem.ManaPotion;
+import org.rpg.isekai.domain.item.potionItem.PotionItem;
 import org.rpg.isekai.domain.monster.*;
 
 import static org.rpg.isekai.domain.character.Character.*;
@@ -65,48 +68,103 @@ public class DungeonBattleView {
 
     // ── 플레이어 스킬 선택 ─────────────────────────────────────────────────────
 
-    public static ActiveSkill showSkillMenu(Character ch) {
-        System.out.println();
-        System.out.println("     ══════════════════  ★  당 신 의 턴  ★  ══════════════════");
-        System.out.println();
-
-        List<ActiveSkill> usable   = ch.getUsableSkills();
-        List<ActiveSkill> allActive = ch.getSkills().stream()
-                .filter(ActiveSkill.class::isInstance)
-                .map(ActiveSkill.class::cast)
-                .toList();
-
-        java.util.Map<Integer, ActiveSkill> selectable = new java.util.LinkedHashMap<>();
-        int selectIdx = 1;
-
-        for (ActiveSkill skill : allActive) {
-            if (usable.contains(skill)) {
-                System.out.printf("       %d.  %-16s  MP %3d   DMG %3d%n",
-                        selectIdx, skill.getName(), skill.getMpCost(), skill.getDamage());
-                selectable.put(selectIdx++, skill);
-            } else {
-                int cd = ch.getCoolDownContext().getRemainingCooldown(skill);
-                String reason = cd > 0 ? "쿨다운 " + cd + "턴" : "MP 부족";
-                System.out.printf("       -   %-16s  [%s]%n", skill.getName(), reason);
-            }
-        }
-
-        if (selectable.isEmpty()) {
-            System.out.println("     [ ! ] 사용 가능한 스킬이 없습니다.");
-            ConsoleUtils.sleep(1200);
-            return null;
-        }
-
+    public static ActiveSkill showSkillMenu(Dungeon dungeon, Character ch) {
         while (true) {
+            System.out.println();
+            System.out.println("     ══════════════════  ★  당 신 의 턴  ★  ══════════════════");
+            System.out.println();
+
+            List<ActiveSkill> usable    = ch.getUsableSkills();
+            List<ActiveSkill> allActive = ch.getSkills().stream()
+                    .filter(ActiveSkill.class::isInstance)
+                    .map(ActiveSkill.class::cast)
+                    .toList();
+
+            java.util.Map<Integer, ActiveSkill> selectable = new java.util.LinkedHashMap<>();
+            int selectIdx = 1;
+
+            for (ActiveSkill skill : allActive) {
+                if (usable.contains(skill)) {
+                    System.out.printf("       %d.  %-16s  MP %3d   DMG %3d%n",
+                            selectIdx, skill.getName(), skill.getMpCost(), skill.getDamage());
+                    selectable.put(selectIdx++, skill);
+                } else {
+                    int cd = ch.getCoolDownContext().getRemainingCooldown(skill);
+                    String reason = cd > 0 ? "쿨다운 " + cd + "턴" : "MP 부족";
+                    System.out.printf("       -   %-16s  [%s]%n", skill.getName(), reason);
+                }
+            }
+
+            System.out.println();
+            System.out.println("       9.  포션 사용");
+
+            if (selectable.isEmpty()) {
+                System.out.println("     [ ! ] 사용 가능한 스킬이 없습니다.");
+            }
+
             System.out.println();
             System.out.print("     스킬 선택 > ");
             String input = ConsoleUtils.SCANNER.nextLine().trim();
+
+            if (input.equals("9")) {
+                showPotionMenu(ch);
+                showBattleState(dungeon);
+                continue;
+            }
+
+            if (selectable.isEmpty()) {
+                ConsoleUtils.sleep(1200);
+                return null;
+            }
+
             try {
                 int idx = Integer.parseInt(input);
                 if (selectable.containsKey(idx)) return selectable.get(idx);
             } catch (NumberFormatException ignored) {}
             System.out.println("     [ ! ] 올바른 번호를 입력하세요.");
         }
+    }
+
+    // ── 포션 사용 ──────────────────────────────────────────────────────────────
+
+    private static void showPotionMenu(Character ch) {
+        List<Item> potions = ch.getInventory().getItems().stream()
+                .filter(item -> item instanceof PotionItem)
+                .toList();
+
+        System.out.println();
+        System.out.println("     ─────────────────────────────────────────────────────────");
+        System.out.println("     [ 포 션 사 용 ]");
+        System.out.println();
+
+        if (potions.isEmpty()) {
+            System.out.println("     [ ! ] 보유한 포션이 없습니다.");
+            ConsoleUtils.sleep(700);
+            System.out.println("     ─────────────────────────────────────────────────────────");
+            return;
+        }
+
+        for (int i = 0; i < potions.size(); i++) {
+            PotionItem p = (PotionItem) potions.get(i);
+            String stat = (p instanceof ManaPotion) ? "MP" : "HP";
+            System.out.printf("       %d.  %-20s  %s +%d%n",
+                    i + 1, p.getName(), stat, p.getHealAmount());
+        }
+        System.out.println("       0.  돌아가기");
+        System.out.println();
+        System.out.print("     포션 선택 > ");
+
+        String input = ConsoleUtils.SCANNER.nextLine().trim();
+        System.out.println("     ─────────────────────────────────────────────────────────");
+
+        if (input.equals("0")) return;
+
+        try {
+            int idx = Integer.parseInt(input) - 1;
+            if (idx >= 0 && idx < potions.size()) {
+                ch.useItem(potions.get(idx));
+            }
+        } catch (NumberFormatException ignored) {}
     }
 
     // ── 턴 결과 로그 ───────────────────────────────────────────────────────────

@@ -162,7 +162,7 @@ public class GameController implements Starter {
             DungeonBattleView.showBattleState(dungeon);
 
             // 플레이어 스킬 선택 (null = 사용 가능한 스킬 없음 → 턴 스킵)
-            ActiveSkill skill = DungeonBattleView.showSkillMenu(character);
+            ActiveSkill skill = DungeonBattleView.showSkillMenu(dungeon, character);
 
             // 턴 실행 (플레이어 -> 몬스터 자동)
             StageContext ctx     = stage.getContext();

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.rpg.isekai.domain.item.Item;
 import org.rpg.isekai.domain.item.amorItem.LeatherArmor;
+import org.rpg.isekai.domain.item.potionItem.ManaPotion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class InitialManager implements Manager{
     @Override
     public void prepare() {
         initialItems.add(new LeatherArmor());
+        initialItems.add(new ManaPotion());
     }
 
 }

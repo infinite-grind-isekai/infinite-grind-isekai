@@ -1,6 +1,7 @@
 package org.rpg.isekai.domain.character;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.rpg.isekai.domain.battle.BattleParticipant;
 import org.rpg.isekai.domain.battle.Reward;
 import org.rpg.isekai.domain.battle.SkillCoolDownContext;
@@ -35,7 +36,10 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
     private Job job;
     private int gold;
     private List<Skill> skills;
+
+    @Setter
     private int currentHp;
+    @Setter
     private int currentMp;
 
     public Character(String name) {

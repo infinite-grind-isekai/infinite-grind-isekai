@@ -4,6 +4,6 @@ import org.rpg.isekai.domain.skill.ActiveSkill;
 
 public class IceSpear extends ActiveSkill {
     public IceSpear() {
-        super("아이스 스피어", 30, 0, 70);
+        super("아이스 스피어", 30, 2, 70);
     }
 }

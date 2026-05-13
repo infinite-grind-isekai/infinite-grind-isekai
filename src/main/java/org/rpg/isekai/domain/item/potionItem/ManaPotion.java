@@ -9,7 +9,7 @@ public class ManaPotion extends PotionItem {
 
     @Override
     public void use(Character character) {
-        character.getTotalStat().setMp(character.getTotalStat().getMp() + getHealAmount());
+        character.setCurrentMp(Math.max(character.getTotalStat().getMp(), character.getCurrentMp() + getHealAmount()));
         System.out.println(getName() + " 사용! MP +" + getHealAmount());
     }
 }
