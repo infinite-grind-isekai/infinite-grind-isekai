@@ -14,7 +14,7 @@ public class Dungeon {
     private final DungeonDifficulty difficulty;
     private final List<BattleStage> stages;
     private int currentStageIndex;
-    private double dropRatio = 0.1;
+    private double dropRatio = 0.6;
     private Character player;
     private final RewardContext rewardContext = new RewardContext();
 
