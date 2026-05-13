@@ -167,7 +167,12 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
 
     public void useItem(Item item) {
         if (!inventory.remove(item)) throw new IllegalStateException("보유하지 않은 아이템입니다.");
-        item.use(this);
+        try {
+            item.use(this);
+        } catch (RuntimeException e) {
+            inventory.add(item);
+            throw e;
+        }
     }
 
     private String validateName(String username) {

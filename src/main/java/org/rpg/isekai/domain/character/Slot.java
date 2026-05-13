@@ -4,5 +4,5 @@ import org.rpg.isekai.domain.item.Item;
 
 public interface Slot {
     Stat getStat();
-    void equip(Item item);
+    void equip(Item item, Inventory inventory);
 }

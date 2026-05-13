@@ -16,15 +16,16 @@ public class IoCManager {
         MonsterManager monsterManager = new MonsterManager();
         ItemManager itemManager = new ItemManager();
         DungeonManager dungeonManager = new DungeonManager(monsterManager);
+        InitialManager initialManager = new InitialManager();
 
-        List<Manager> tmpList = List.of(monsterManager, dungeonManager);
+        List<Manager> tmpList = List.of(monsterManager, dungeonManager, itemManager, initialManager);
         managers    = tmpList.stream().sorted(Comparator.comparingInt(Manager::getOrder)).toList();
         registerars = tmpList.stream()
                 .filter(c -> c instanceof Registerar)
                 .map(c -> (Registerar) c)
                 .toList();
 
-        starter = new GameController(dungeonManager, itemManager);
+        starter = new GameController(dungeonManager, itemManager, initialManager);
     }
 
     public void run() {

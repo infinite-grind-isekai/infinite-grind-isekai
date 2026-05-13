@@ -295,7 +295,7 @@ public class DungeonBattleView {
 
     private static String[] characterArt(Character ch) {
         if (ch.getJob() == null) return new String[]{"   ( ? )"};
-        return switch (ch.getJob().getName()) {
+        return switch (ch.getJob().getJobKind().getName()) {
             case "전사" -> new String[]{
                 "    _O_",
                 "   [/|\\]",
@@ -312,7 +312,7 @@ public class DungeonBattleView {
                 "    \\|/",
                 "   /   \\"
             };
-            case "궁수" -> new String[]{
+            case "아처" -> new String[]{
                 "    (O)",
                 "  <--\\|",
                 "    --o",

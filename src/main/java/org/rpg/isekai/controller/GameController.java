@@ -21,10 +21,12 @@ public class GameController implements Starter {
 
     private final DungeonManager dungeonManager;
     private final ItemManager itemManager;
+    private final InitialManager initialManager;
 
-    public GameController(DungeonManager dungeonManager, ItemManager itemManager) {
+    public GameController(DungeonManager dungeonManager, ItemManager itemManager, InitialManager initialManager) {
         this.dungeonManager = dungeonManager;
         this.itemManager = itemManager;
+        this.initialManager = initialManager;
     }
 
     @Override
@@ -53,6 +55,10 @@ public class GameController implements Starter {
         Character character = new Character(name);
         character.setJob(job);
 
+        for (Item item : initialManager.getInitialItems()) {
+            character.obtainItem(item);
+        }
+
         gameLoop(character);
     }
 
@@ -64,6 +70,7 @@ public class GameController implements Starter {
                 case 2 -> manageInventory(character);
                 case 3 -> selectAndPlayDungeon(character);
                 case 4 -> enterStore(character);
+                case 5 -> GameMenuView.showEquipment(character);
                 case 0 -> { return; }
             }
         }
@@ -75,9 +82,12 @@ public class GameController implements Starter {
             if (itemIdx == -1) break;
 
             Item selected = character.getInventory().getItems().get(itemIdx);
-            selected.use(character);
-
-            System.out.println("     [ + ] " + selected.getName() + "을(를) 사용(장착)했습니다.");
+            try {
+                character.useItem(selected);
+                System.out.println("     [ + ] " + selected.getName() + "을(를) 사용(장착)했습니다.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("     [ ! ] " + e.getMessage());
+            }
             ConsoleUtils.sleep(1000);
         }
     }

@@ -18,6 +18,6 @@ public class ArmorItem extends Item {
 
     @Override
     public void use(Character character) {
-        character.getLoadout().equip(this);
+        character.getLoadout().equip(this, character.getInventory());
     }
 }

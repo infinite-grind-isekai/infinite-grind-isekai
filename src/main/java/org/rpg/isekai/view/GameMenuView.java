@@ -5,6 +5,9 @@ import org.rpg.isekai.domain.battle.DungeonKind;
 import org.rpg.isekai.domain.character.Character;
 import org.rpg.isekai.domain.character.Stat;
 import org.rpg.isekai.domain.item.Item;
+import org.rpg.isekai.domain.item.amorItem.ArmorItem;
+import org.rpg.isekai.domain.item.amorItem.ArmorType;
+import org.rpg.isekai.domain.item.weaponItem.WeaponItem;
 import org.rpg.isekai.domain.skill.ActiveSkill;
 import org.rpg.isekai.domain.skill.Skill;
 
@@ -27,6 +30,7 @@ public class GameMenuView {
             System.out.println("     ║    2.  인벤토리                                       ║");
             System.out.println("     ║    3.  던전 입장                                      ║");
             System.out.println("     ║    4.  상점 입장                                      ║");
+            System.out.println("     ║    5.  장착 아이템                                    ║");
             System.out.println("     ║                                                       ║");
             System.out.println("     ║    0.  게임 종료                                      ║");
             System.out.println("     ║                                                       ║");
@@ -36,7 +40,7 @@ public class GameMenuView {
 
             String input = ConsoleUtils.SCANNER.nextLine().trim();
             switch (input) {
-                case "1", "2", "3", "4", "0" -> { return Integer.parseInt(input); }
+                case "1", "2", "3", "4", "5", "0" -> { return Integer.parseInt(input); }
                 default -> {
                     System.out.println("     [ ! ] 올바른 번호를 입력하세요.");
                     ConsoleUtils.sleep(700);
@@ -93,6 +97,51 @@ public class GameMenuView {
         ConsoleUtils.SCANNER.nextLine();
     }
 
+    // ── 장착 아이템 ─────────────────────────────────────────────────────────────
+
+    public static void showEquipment(Character ch) {
+        ConsoleUtils.clear();
+        WeaponItem weapon = ch.getLoadout().getWeaponSlot().getWeapon();
+        Map<ArmorType, ArmorItem> armors = ch.getLoadout().getArmorSlots().getArmorItems();
+
+        System.out.println();
+        System.out.println("     ┌───────────────────────────────────────────────────────┐");
+        System.out.println("     │                 [ 장 착 아 이 템 ]                    │");
+        System.out.println("     ├───────────────────────────────────────────────────────┤");
+        System.out.println("     │   [ 무  기 ]                                          │");
+
+        if (weapon == null) {
+            System.out.println("     │     (미착용)                                          │");
+        } else {
+            System.out.printf("     │     %-14s  공격력 +%-3d  크리티컬 +%-4.0f%%         │%n",
+                    weapon.getName(), weapon.getAttackPower(), weapon.getCritical());
+        }
+
+        System.out.println("     ├───────────────────────────────────────────────────────┤");
+        System.out.println("     │   [ 방 어 구 ]                                        │");
+
+        printArmorRow("머리", ArmorType.HEAD, armors);
+        printArmorRow("몸통", ArmorType.CHEST, armors);
+        printArmorRow("장갑", ArmorType.HAND, armors);
+        printArmorRow("신발", ArmorType.FEET, armors);
+        printArmorRow("방패", ArmorType.SHIELD, armors);
+
+        System.out.println("     └───────────────────────────────────────────────────────┘");
+        System.out.println();
+        System.out.print("     [ ENTER 를 눌러 돌아가기 ]");
+        ConsoleUtils.SCANNER.nextLine();
+    }
+
+    private static void printArmorRow(String label, ArmorType type, Map<ArmorType, ArmorItem> armors) {
+        ArmorItem armor = armors.get(type);
+        if (armor == null) {
+            System.out.printf("     │   %-4s  :  (미착용)                                  │%n", label);
+        } else {
+            System.out.printf("     │   %-4s  :  %-16s  방어력 +%-3d              │%n",
+                    label, armor.getName(), armor.getDefensePower());
+        }
+    }
+
     // ── 인벤토리 ────────────────────────────────────────────────────────────────
 
     public static int showInventory(Character ch) {
@@ -135,6 +184,8 @@ public class GameMenuView {
             ConsoleUtils.sleep(700);
         }
     }
+
+
 
     // ── 던전 목록 ───────────────────────────────────────────────────────────────
 

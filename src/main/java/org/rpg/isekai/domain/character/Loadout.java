@@ -20,14 +20,14 @@ public class Loadout {
         return armorSlots.getStat().plus(weaponSlot.getStat());
     }
 
-    public void equip(Item item) {
+    public void equip(Item item, Inventory inventory) {
         if (item instanceof WeaponItem) {
-            weaponSlot = new WeaponSlot((WeaponItem) item);
+            weaponSlot.equip(item, inventory);
             return;
         }
 
         if (item instanceof ArmorItem) {
-            armorSlots.equip(item);
+            armorSlots.equip(item, inventory);
         }
     }
 
