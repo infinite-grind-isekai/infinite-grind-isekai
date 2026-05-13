@@ -101,6 +101,9 @@ Application.main()
 Container.get(Starter).start()
   └─ GameController  ← 전체 게임 루프 진입점
 ```
+- 부팅 시퀀스는 **애플리케이션 시작 → 전역 객체/리소스 초기화 → 의존성 등록(IoC) → 게임 루프 시작** 흐름으로 구성
+
+- main() 은 최소한의 시작만 담당하고, 실제 준비 작업은 IsekaiApplication.run() 과 [IoCManager.in](http://iocmanager.in/)it() 안으로 위임한 구조
 
 ### IoC 컨테이너
 
