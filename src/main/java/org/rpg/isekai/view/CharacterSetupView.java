@@ -79,11 +79,12 @@ public class CharacterSetupView {
         for (int i = 0; i < JOBS.length; i++) {
             Job job = JOBS[i];
             System.out.printf(
-                "     │   [ %d ] %-8s   ATK %3d   DEF %3d   HP %3d   MP %3d        │%n",
+                "     │   [ %d ] %-8s   ATK %3d   DEF %3d   CRI %3f   HP %3d   MP %3d        │%n",
                 i + 1,
                 job.getName(),
                 job.getStat().getPower(),
                 job.getStat().getDefense(),
+                job.getStat().getCritical(),
                 job.getStat().getHp(),
                 job.getStat().getMp()
             );
