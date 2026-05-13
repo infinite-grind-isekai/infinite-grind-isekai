@@ -160,6 +160,11 @@ public class Character implements HasLevel, Attackable<Skill>, Damageable, Battl
         gold += reward.gold();
         inventory.addAll(reward.items());
     }
+
+    public void unequip(Item item) {
+        loadout.unequip(item);
+    }
+
     public void useItem(Item item) {
         if (!inventory.remove(item)) throw new IllegalStateException("보유하지 않은 아이템입니다.");
         item.use(this);

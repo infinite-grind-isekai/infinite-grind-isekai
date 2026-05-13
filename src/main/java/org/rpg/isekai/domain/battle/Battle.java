@@ -120,7 +120,7 @@ public class Battle {
         }
         List<ActiveSkill> usable = actor.getUsableSkills();
         if (usable.isEmpty()) {
-            throw new IllegalStateException("몬스터가 사용할 수 있는 액티브 스킬이 없습니다.");
+            return new org.rpg.isekai.domain.skill.monster.MonsterBasicAttack();
         }
         return usable.get(new Random().nextInt(usable.size()));
     }
