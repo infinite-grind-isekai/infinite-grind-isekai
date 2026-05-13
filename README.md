@@ -22,7 +22,7 @@
 14. [보상 시스템](#보상-시스템)
 15. [프로젝트 구조](#프로젝트-구조)
 
-> 최근 추가된 기능: 전투 중 포션 사용 (9번), 장착 아이템 화면 (메뉴 5번), 무기 직업 제한, 방어구 부위별 착용 및 교체 반환, 신규 캐릭터 초기 아이템 지급 (InitialManager)
+> 최근 추가된 기능: 전투 중 포션 사용 (9번), 장착 아이템 화면 (메뉴 5번), 무기 직업 제한, 방어구 부위별 착용 및 교체 반환, 신규 캐릭터 초기 아이템 지급 (InitialManager), 백골의 요새 던전 추가, 메가 스켈레톤 (BOSS) 추가, 초보자 방어구 3종 추가 (Circlet·Gauntlet·Greaves)
 
 ---
 
@@ -51,7 +51,7 @@
        ├─ 오프닝 스크립트
        ├─ 이름 입력 (3 ~ 8 글자)
        ├─ 직업 선택
-       ├─ 초기 아이템 지급 (LeatherArmor)
+       ├─ 초기 아이템 지급 (LeatherArmor + ManaPotion + 직업 전용 무기)
        └─ 메인 메뉴 루프
             ├─ 1. 내 정보 보기
             ├─ 2. 인벤토리 (아이템 사용·장착)
@@ -179,9 +179,11 @@ Item (abstract)
   │     ├── MagicStaff              (STAFF)
   │     └── ThunderstrikeGun        (RANGED)
   ├── ArmorItem   — defensePower, ArmorType
-  │     ├── LeatherArmor / IronPlate / TitanArmor
-  │     ├── FrostguardShield        (SHIELD)
-  │     └── DragonScaleMail
+  │     ├── LeatherArmor / IronPlate / TitanArmor / DragonScaleMail  (CHEST)
+  │     ├── FrostguardShield                                          (SHIELD)
+  │     ├── Circlet                                                   (HEAD)
+  │     ├── Gauntlet                                                  (HAND)
+  │     └── Greaves                                                   (FEET)
   ├── PotionItem  — healAmount
   │     ├── HealthPotion / ManaPotion / EnergyDrink
   │     ├── HeartOfDragon / PhoenixFeather
@@ -212,8 +214,9 @@ Monster  (implements BattleParticipant, Rewardable)
   ├── Slime / GiantSlime
   ├── Skeleton / Goblin / Orc
   ├── Harpy / Golem / Werewolf
-  ├── Vampire  (BOSS)
-  └── AncientDragon (BOSS)
+  ├── Vampire      (BOSS)
+  ├── AncientDragon (BOSS)
+  └── MegaSkeleton  (BOSS)
 ```
 
 `Monster.getDamage()` 에서 `MonsterType.BOSS` 여부에 따라 ×0.8 계수가 적용됩니다. 서브클래스는 생성자에서 스탯·스킬·리워드·EXP 만 정의하면 됩니다.
@@ -391,8 +394,18 @@ getTotalStat() = baseStat + levelBonus + job.getStat() + loadout.getItemsStat()
 
 ### 신규 캐릭터 초기 아이템
 
-`InitialManager` 가 게임 시작 시 캐릭터에게 초기 아이템을 지급합니다.  
-현재 `LeatherArmor` 1개가 인벤토리에 지급되며, `prepare()` 에서 목록을 관리합니다.
+`InitialManager` 가 게임 시작 시 캐릭터에게 초기 아이템을 지급합니다.
+
+| 아이템 | 조건 |
+|--------|------|
+| LeatherArmor (가죽 갑옷) | 모든 직업 공통 |
+| ManaPotion (마나 포션) | 모든 직업 공통 |
+| IronSword | 전사 (MELEE) |
+| MagicStaff | 마법사 (STAFF) |
+| ShadowBow | 궁수 (BOW) |
+| ThunderstrikeGun | 건슬링어 (RANGED) |
+
+`prepareForJob(job)` 이 직업의 `WeaponType` 을 기준으로 `initialWeapons` 맵에서 해당 무기를 골라 지급한다.
 
 ### 무기 목록
 
@@ -406,13 +419,16 @@ getTotalStat() = baseStat + levelBonus + job.getStat() + loadout.getItemsStat()
 
 ### 방어구 목록
 
-| 이름 | DEF | 슬롯 |
-|------|-----|------|
-| LeatherArmor | — | CHEST |
-| IronPlate | — | CHEST |
-| TitanArmor | — | CHEST |
-| FrostguardShield | — | SHIELD |
-| DragonScaleMail | — | CHEST |
+| 이름 | DEF | 슬롯 | 가격 |
+|------|-----|------|------|
+| LeatherArmor (가죽 갑옷) | 5 | CHEST | 100 G |
+| IronPlate (철판 갑옷) | 15 | CHEST | 500 G |
+| TitanArmor (타이탄 갑옷) | 30 | CHEST | 2000 G |
+| DragonScaleMail (용린 갑옷) | 50 | CHEST | 5000 G |
+| FrostguardShield (빙결 수호 방패) | 30 | SHIELD | 2000 G |
+| Circlet (초보자의 서클릿) | 10 | HEAD | 200 G |
+| Gauntlet (초보자의 건틀릿) | 3 | HAND | 200 G |
+| Greaves (초보자의 그리브) | 5 | FEET | 100 G |
 
 ---
 
@@ -437,6 +453,7 @@ getTotalStat() = baseStat + levelBonus + job.getStat() + loadout.getItemsStat()
 | 던전 | 난이도 | 스테이지 구성 |
 |------|--------|------------|
 | 언노운 데이터 뱅크 | NORMAL | 자이언트 슬라임 (BOSS) |
+| 백골의 요새 | NORMAL | 스켈레톤 → 스켈레톤×3 → 메가 스켈레톤 (BOSS) |
 | 테스트 서버 No.4 | NORMAL | 고블린 + 슬라임 → 고대 드래곤 (BOSS) |
 | 디버깅 가든 | NIGHTMARE | 스켈레톤×2 + 고블린 → 오크×2 → 고대 드래곤 (BOSS) |
 
@@ -465,8 +482,10 @@ getTotalStat() = baseStat + levelBonus + job.getStat() + loadout.getItemsStat()
 | 워우울프 | NORMAL | 50 | 100 | 40 | 2500 | 200 | 300 | 800 |
 | 뱀파이어 | BOSS | 80 | 120 | 60 | 4000 | 1000 | 1000 | 2000 |
 | 고대 드래곤 | BOSS | 100 | 150 | 80 | 5000 | 1000 | 500 | 1000 |
+| 메가 스켈레톤 | BOSS | 10 | 8 | 3 | 200 | 0 | 200 | 20 |
 
-> BOSS 타입은 공격 데미지 **× 0.8** 감소.
+> BOSS 타입은 공격 데미지 **× 0.8** 감소.  
+> 메가 스켈레톤은 처치 시 초보자의 그리브·건틀릿·서클릿을 드롭한다.
 
 ---
 
