@@ -51,7 +51,7 @@ public class DungeonManager implements Manager, Registerar {
         Supplier<Monster> orc = monsterManager.getFactory(Orc.class);
         Supplier<Monster> dragon = monsterManager.getFactory(AncientDragon.class);
         Supplier<Monster> giantSlime = monsterManager.getFactory(GiantSlime.class);
-        Supplier<Monster> megaSkelton = monsterManager.getFactory(MegaSkelton.class);
+        Supplier<Monster> megaSkelton = monsterManager.getFactory(MegaSkeleton.class);
 
         return Map.of(
             DungeonKind.UNKNOWN_DATA_BANK, List.of(
