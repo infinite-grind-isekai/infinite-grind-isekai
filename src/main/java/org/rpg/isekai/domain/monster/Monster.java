@@ -21,7 +21,7 @@ public class Monster implements HasLevel, Attackable<Skill>, Damageable, BattleP
     private final MonsterType type;
     private final Stat stat;
     private final List<Skill> skills;
-    private Reward reward;
+    private final Reward reward;
     private final int exp;
     private int currentHp;
     private int currentMp;
